@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -18,9 +17,9 @@ public class RobotPrepScore extends Command {
     private final Drivetrain drivetrain;
     private final double speedMultiplier;
     private final double turnMultiplier;
-    private final XboxController controller;
+    private final GenericHID controller;
 
-    public RobotPrepScore(EndEffector endEffector, double endEffectorSetpoint, Elevator elevator, double elevatorSetpoint, Drivetrain drivetrain, double speedMultiplier, double turnMultiplier, XboxController controller) {
+    public RobotPrepScore(EndEffector endEffector, double endEffectorSetpoint, Elevator elevator, double elevatorSetpoint, Drivetrain drivetrain, double speedMultiplier, double turnMultiplier, GenericHID controller) {
         this.endEffector = endEffector;
         this.endEffectorSetpoint = endEffectorSetpoint;
 
