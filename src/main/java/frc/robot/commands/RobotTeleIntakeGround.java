@@ -55,7 +55,7 @@ public class RobotTeleIntakeGround extends Command {
     public void execute() {
         // Roller Control
         intake.setIntakeRollerMotorSpeed(intakeSpeed);
-        intake.setIndexerMotorSpeed(intakeSpeed);
+        intake.setIndexerMotorSpeed(-intakeSpeed);
 
         double motorSpeed = speed;
 
