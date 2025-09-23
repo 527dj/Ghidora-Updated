@@ -46,8 +46,8 @@ import frc.robot.commands.DrivetrainRightAlign;
 public class RobotContainer {
     //====================GENERAL SETUP====================
     //private final SendableChooser<Command> autoChooser;
-    private final CommandPS5Controller driverController = new CommandPS5Controller(Devices.DRIVER_CONTROLLER_PORT);
-    private final CommandPS5Controller operatorController = new CommandPS5Controller(Devices.OPERATOR_CONTROLLER);
+    private final CommandXboxController driverController = new CommandXboxController(Devices.DRIVER_CONTROLLER_PORT);
+    private final CommandXboxController operatorController = new CommandXboxController(Devices.OPERATOR_CONTROLLER);
 
     //====================SWERVE SETUP====================
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -101,11 +101,11 @@ public class RobotContainer {
         //driverController.leftBumper().whileTrue(new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
 
         //====================Align Right====================
-        driverController.R1().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance()));
+        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance()));
 
         //====================Ground Intake====================
-        driverController.L2().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
-        driverController.L2().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
+        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
+        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
 
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
@@ -122,24 +122,24 @@ public class RobotContainer {
                 )
         );
         //====================End Effector Run====================
-        driverController.R2().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
-        driverController.R2().onFalse(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+        driverController.rightTrigger().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
+        driverController.rightTrigger().onFalse(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
 
         //======================Algae Intake=======================
-        driverController.cross().whileTrue(new AlgaeNetScore(EndEffector.getInstance(), Constants.End_Effector_Algae_Score_Speed, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
-        driverController.cross().onFalse(new AlgaeNetScore(EndEffector.getInstance(), Constants.Absolute_Zero, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Turn_Multiplier, driverController.getHID()));
+        driverController.a().whileTrue(new AlgaeNetScore(EndEffector.getInstance(), Constants.End_Effector_Algae_Score_Speed, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.a().onFalse(new AlgaeNetScore(EndEffector.getInstance(), Constants.Absolute_Zero, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Turn_Multiplier, driverController.getHID()));
 
         //====================Level 2 Coral Score====================
-        driverController.circle().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L2_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
-        driverController.circle().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+        driverController.b().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L2_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.b().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
 
         //====================Level 3 Coral Score====================
-        driverController.square().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L3_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
-        driverController.square().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+        driverController.x().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L3_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.x().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
 
         //====================Level 4 Coral Score====================
-        driverController.triangle().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
-        driverController.triangle().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+        driverController.y().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.y().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
 
         //====================Coral Gullet Intake====================
         driverController.button(8).whileTrue(new RobotStationIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Coral_Station_Setpoint, Constants.End_Effector_Coral_Station_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Coral_Station_Setpoint));
