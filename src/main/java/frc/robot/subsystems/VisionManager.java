@@ -31,8 +31,8 @@ public class VisionManager extends SubsystemBase {
   }
 
   public Pose3d getPose() {
-    LimelightResults results = LimelightHelpers.getLatestResults("dihlite");
-
+    LimelightResults results = LimelightHelpers.getLatestResults("limelight-dihlite");
+    
     if (results.targets_Fiducials.length > 0) {
       LimelightTarget_Fiducial tag = results.targets_Fiducials[0];
       return tag.getRobotPose_TargetSpace();
