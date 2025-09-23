@@ -41,6 +41,7 @@ import frc.robot.commands.ClimbWristRun;
 import frc.robot.commands.DrivetrainLeftAlign;
 //Limelight Imports
 import frc.robot.commands.DrivetrainRightAlign;
+import frc.robot.commands.DrivetrainReefAutoAlignProfiled;
 
 public class RobotContainer {
     //====================GENERAL SETUP====================
@@ -100,8 +101,14 @@ public class RobotContainer {
         driverController.leftBumper().whileTrue(new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
 
         //====================Align Right====================
-        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance()));
-
+        driverController.rightBumper()
+        .whileTrue(new DrivetrainReefAutoAlignProfiled(drivetrain, "limelight", DrivetrainReefAutoAlignProfiled.Branch.RIGHT)
+           .withStandoff(Constants.FB_Setpoint)           // 0.55 m default
+           .withBranchOffsets(Constants.L_Setpoint, Constants.R_Setpoint)
+           .withTolerances(0.02, 0.02, 0.6)
+           .withLimits(Constants.DrivetrainMaxSpeed, Constants.DrivetrainMaxSpeed,
+                       Constants.DrivetrainMaxAngularRate)
+           .withTiming(0.18, 2.5));
         //====================Ground Intake====================
         driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
         driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
