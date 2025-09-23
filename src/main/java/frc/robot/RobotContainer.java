@@ -110,7 +110,7 @@ public class RobotContainer {
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
                 Commands.parallel(    
-                new IntakeRunCmd(Intake.getInstance(), Constants.Outake_Ground_Run_Speed),
+                new IntakeRunCmd(Intake.getInstance(), Constants.Intake_Ground_Run_Speed),
                 new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Ground_Outake_Speed)
                 )
         );
