@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
@@ -56,7 +57,7 @@ public class RobotTeleIntakeGround extends Command {
         // Roller Control
         intake.setIntakeRollerMotorSpeed(intakeSpeed);
         intake.setIndexerMotorSpeed(-intakeSpeed);
-
+        //intake.goToIntakeWristSetpoint(setpoint);
         double motorSpeed = speed;
 
         endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
@@ -77,26 +78,26 @@ public class RobotTeleIntakeGround extends Command {
 
         // OLD
         if (endEffector.getEndEffectorFrontPhotoElectricReading() == true) {
-        endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+            endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
 
-        controller.setRumble(XboxController.RumbleType.kLeftRumble,
-        Devices.CONTROLLER_RUMBLE);
-        controller.setRumble(XboxController.RumbleType.kRightRumble,
-        Devices.CONTROLLER_RUMBLE);
-        } else {
-        endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
+            controller.setRumble(XboxController.RumbleType.kLeftRumble,
+            Devices.CONTROLLER_RUMBLE);
+            controller.setRumble(XboxController.RumbleType.kRightRumble,
+            Devices.CONTROLLER_RUMBLE);
+        } 
+        else {
+            endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
-        controller.setRumble(XboxController.RumbleType.kLeftRumble,
-        Constants.Absolute_Zero);
-        controller.setRumble(XboxController.RumbleType.kRightRumble,
-        Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kLeftRumble,
+            Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kRightRumble,
+            Constants.Absolute_Zero);
         }
-
+        SmartDashboard.putNumber("Current Intake Wrist Position: ",Intake.getInstance().getIntakeWristEncoder());
         // PID Control
-        intake.goToIntakeWristSetpoint();
+        intake.goToIntakeWristSetpoint(intakeSetpoint);
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();
-
     }
 
     @Override

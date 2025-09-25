@@ -102,7 +102,7 @@ public class RobotContainer {
 
         //====================Align Right====================
         driverController.rightBumper()
-        .whileTrue(new DrivetrainReefAutoAlignProfiled(drivetrain, "limelight", DrivetrainReefAutoAlignProfiled.Branch.RIGHT)
+        .whileTrue(new DrivetrainReefAutoAlignProfiled(drivetrain, "limelight-dihlite", DrivetrainReefAutoAlignProfiled.Branch.RIGHT)
            .withStandoff(Constants.FB_Setpoint)           // 0.55 m default
            .withBranchOffsets(Constants.L_Setpoint, Constants.R_Setpoint)
            .withTolerances(0.02, 0.02, 0.6)

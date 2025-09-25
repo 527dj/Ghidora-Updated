@@ -78,8 +78,9 @@ public class Constants {
     public static final double Outake_Ground_Run_Speed = -0.2;
 
     //Intake Setpoints
-    public static final double Intake_Zero_Setpoint = 0.0; // OLD: 39
-    public static final double Intake_Ground_Deploy_Setpoint = -11.0; // OLD: 30
+    public static final double Intake_Zero_Setpoint = 0.0;
+    public static final double Intake_Stow_Setpoint = -8.5;
+    public static final double Intake_Ground_Deploy_Setpoint = -10; 
 
     //====================End Effector====================
     //End Effector Motion Magic

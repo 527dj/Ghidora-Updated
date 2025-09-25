@@ -5,6 +5,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,14 +34,7 @@ public class VisionManager extends SubsystemBase {
   }
 
   public Pose3d getPose() {
-    LimelightResults results = LimelightHelpers.getLatestResults("limelight-dihlite");
-
-    if (results.targets_Fiducials.length > 0) {
-      LimelightTarget_Fiducial tag = results.targets_Fiducials[0];
-      return tag.getRobotPose_TargetSpace();
-    } else {
-      return null;
-    }
+    return LimelightHelpers.getCameraPose3d_TargetSpace("limelight-dihlite");
   }
 
   public void logPose() {

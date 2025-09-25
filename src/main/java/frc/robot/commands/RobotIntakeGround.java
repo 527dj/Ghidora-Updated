@@ -70,7 +70,7 @@ public class RobotIntakeGround extends Command {
         }
 
         //PID Control
-        intake.goToIntakeWristSetpoint();
+        intake.goToIntakeWristSetpoint(23);
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();        
 
