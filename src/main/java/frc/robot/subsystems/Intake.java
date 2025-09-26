@@ -101,6 +101,10 @@ public class Intake extends SubsystemBase {
         return Intake_Wrist_Motor.getVelocity().getValueAsDouble();
     }
 
+    public double getRollerCurrent(){
+        return Intake_Roller_Motor.getStatorCurrent().getValueAsDouble();
+    }
+
     // public void zeroIntakeWristWithAbsolute() {
     //     Intake_Wrist_Motor.setPosition(getIntakeWristThroughBoreWithOffset());
     // }
