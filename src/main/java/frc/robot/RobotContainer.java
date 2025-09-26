@@ -45,7 +45,7 @@ import frc.robot.commands.DrivetrainReefAutoAlignProfiled;
 
 public class RobotContainer {
     //====================GENERAL SETUP====================
-    //private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
     private final CommandXboxController driverController = new CommandXboxController(Devices.DRIVER_CONTROLLER_PORT);
     private final CommandXboxController operatorController = new CommandXboxController(Devices.OPERATOR_CONTROLLER);
 
@@ -62,7 +62,7 @@ public class RobotContainer {
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
         //NamedCommands.registerCommand("DrivetrainLeftAlign", new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
-        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance()));
+        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),true));
 
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
@@ -76,8 +76,8 @@ public class RobotContainer {
 
         configureBindings();
 
-        //autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
-        //SmartDashboard.putData("Auto Mode", autoChooser);
+        autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
     private void configureBindings() {
@@ -98,20 +98,13 @@ public class RobotContainer {
         driverController.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         //====================Align Left====================
-        driverController.leftBumper().whileTrue(new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
+        driverController.leftBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),false));
 
         //====================Align Right====================
-        driverController.rightBumper()
-        .whileTrue(new DrivetrainReefAutoAlignProfiled(drivetrain, "limelight-dihlite", DrivetrainReefAutoAlignProfiled.Branch.RIGHT)
-           .withStandoff(Constants.FB_Setpoint)           // 0.55 m default
-           .withBranchOffsets(Constants.L_Setpoint, Constants.R_Setpoint)
-           .withTolerances(0.02, 0.02, 0.6)
-           .withLimits(Constants.DrivetrainMaxSpeed, Constants.DrivetrainMaxSpeed,
-                       Constants.DrivetrainMaxAngularRate)
-           .withTiming(0.18, 2.5));
+        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), true));
         //====================Ground Intake====================
         driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
-        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
+        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
 
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
@@ -194,8 +187,8 @@ public class RobotContainer {
         operatorController.leftBumper().onFalse(new ClimbRollerRun(Climb.getInstance(), Constants.Absolute_Zero));
 
         //====================Elevator Climb + End Effector=====================
-        operatorController.a().whileTrue(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_Start_Setpoint, Elevator.getInstance(), Constants.Elevator_Climb_Setpoint));
-        operatorController.a().onFalse(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_End_Setpoint, Elevator.getInstance(), Constants.Absolute_Zero));
+         operatorController.a().whileTrue(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_Start_Setpoint, Elevator.getInstance(), Constants.Elevator_Climb_Setpoint));
+         operatorController.a().onFalse(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_End_Setpoint, Elevator.getInstance(), Constants.Absolute_Zero));
 
         //====================Processor=====================
         //operatorController.x().whileTrue(new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Processor_Score_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Processor_Score_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
@@ -216,19 +209,19 @@ public class RobotContainer {
         // //====================Intake Wrist Jog=====================
         operatorController.povLeft().whileTrue(new IntakeWristJog(Intake.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
         // //====================Intake Wrist Manual Zero=====================
-        //operatorController.x().onTrue(new4 ZeroIntakeWrist(Intake.getInstance()));
+        operatorController.x().onTrue(new ZeroIntakeWrist(Intake.getInstance()));
 
         //====================Super Intake=====================
         // operatorController.a().whileTrue(new SuperIntake(Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, 0.5 * Constants.Intake_Ground_Run_Speed));
         // operatorController.a().onFalse(new SuperIntake(Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero));
 
         //====================Spit L1=====================
-        // operatorController.a().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed));
-        // operatorController.a().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+        operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed));
+        operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
     }
 
-        // public Command getAutonomousCommand() {
-        //     return autoChooser.getSelected();
-        // }
+        public Command getAutonomousCommand() {
+            return autoChooser.getSelected();
+        }
     }
     
