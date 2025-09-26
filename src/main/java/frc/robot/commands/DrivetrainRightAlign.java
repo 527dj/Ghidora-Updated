@@ -20,7 +20,7 @@ package frc.robot.commands;
 
      ProfiledPIDController FBPIDController = new ProfiledPIDController(2.75, 0, 0.01, new Constraints(4.0, 4.0)); //2.75, 0, 0, 4
      ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));
-     ProfiledPIDController rotationPIDController = new ProfiledPIDController(0.0775, 0, 0, new Constraints(1.0, 1.0));   
+     ProfiledPIDController rotationPIDController = new ProfiledPIDController(0.1, 0, 0, new Constraints(1.0, 1.0));   
      
      boolean FBPositionHasReset = false;
      boolean LRPositionHasReset = false;
@@ -30,7 +30,8 @@ package frc.robot.commands;
          this.drivetrain = drivetrain;
          this.visionManager = VisionManager.getInstance();
         this.isRight = isRight;
-
+        FBPIDController.setTolerance(0.1);
+        LRPIDController.setTolerance(0.1);
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
@@ -48,7 +49,7 @@ package frc.robot.commands;
         //  SmartDashboard.putNumber("LRAlign kVelo", 0.0);
         //  SmartDashboard.putNumber("LRAlign kAccel", 0.0);
  
-        //  //HotRefreshRotAlignPID
+         //HotRefreshRotAlignPID
         //  SmartDashboard.putNumber("RotAlign kP", 0.0);
         //  SmartDashboard.putNumber("RotAlign kI", 0.0);
         //  SmartDashboard.putNumber("RotAlign kD", 0.0);
@@ -119,10 +120,11 @@ package frc.robot.commands;
          } else {
              RotSpeed = 0.0;
          }
- 
-         // Negate to ensure the correct direction
-         RotSpeed = -RotSpeed; 
- 
+  
+         LRSpeed = LRPIDController.atGoal() ? 0 : LRSpeed;
+         FBSpeed = FBPIDController.atGoal() ? 0 : FBSpeed;
+
+
          SwerveRequest.RobotCentric drivetrainRequest = new SwerveRequest.RobotCentric()
                  .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
                  .withSteerRequestType(SteerRequestType.MotionMagicExpo);
