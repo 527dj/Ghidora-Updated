@@ -113,7 +113,7 @@ public class Constants {
     //Coral
     public static final double End_Effector_Wrist_Zero_Setpoint = 0.0;
     public static final double End_Effector_Wrist_Coral_Ground_Setpoint = 2.56;
-    public static final double End_Effector_Wrist_L1_Score_Setpoint = 3.0;
+    public static final double End_Effector_Wrist_L1_Score_Setpoint = 5.5;
     public static final double End_Effector_Wrist_L2_L3_Score_Setpoint = 12.5;
     public static final double End_Effector_Wrist_L4_Score_Setpoint = 15.5; //13.5
     public static final double End_Effector_Wrist_Coral_Station_Setpoint = 0.0;
