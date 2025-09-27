@@ -6,7 +6,8 @@ package frc.robot.commands;
  import edu.wpi.first.math.controller.ProfiledPIDController;
  import edu.wpi.first.math.geometry.Pose3d;
  import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
- import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  import edu.wpi.first.wpilibj2.command.Command;
  import frc.robot.Constants;
  import frc.robot.TunerConstants;
@@ -16,8 +17,13 @@ package frc.robot.commands;
  public class DrivetrainRightAlign extends Command {
      private final Drivetrain drivetrain;
      private final VisionManager visionManager;
-    private boolean isRight = true; // Set to true for right alignment, false for left alignment
 
+    public enum ALIGN_STATES {
+        LEFT,
+        RIGHT,
+        MIDDLE
+    };
+    private ALIGN_STATES targetPosition;
      ProfiledPIDController FBPIDController = new ProfiledPIDController(2.75, 0, 0.01, new Constraints(4.0, 4.0)); //2.75, 0, 0, 4
      ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));
      ProfiledPIDController rotationPIDController = new ProfiledPIDController(0.1, 0, 0, new Constraints(1.0, 1.0));   
@@ -26,44 +32,44 @@ package frc.robot.commands;
      boolean LRPositionHasReset = false;
      boolean RotPositionHasReset = false;
  
-     public DrivetrainRightAlign(Drivetrain drivetrain, VisionManager visionManager, boolean isRight) {
+     public DrivetrainRightAlign(Drivetrain drivetrain, VisionManager visionManager, ALIGN_STATES targetPosition) {
          this.drivetrain = drivetrain;
          this.visionManager = VisionManager.getInstance();
-        this.isRight = isRight;
+        this.targetPosition = targetPosition;
         FBPIDController.setTolerance(0.1);
         LRPIDController.setTolerance(0.1);
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
          //HotRefreshFBAlignPID
-        //  SmartDashboard.putNumber("FBAlign kP", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kI", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kD", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kAccel", 0.0);
+         SmartDashboard.putNumber("FBAlign kP", 0.0);
+         SmartDashboard.putNumber("FBAlign kI", 0.0);
+         SmartDashboard.putNumber("FBAlign kD", 0.0);
+         SmartDashboard.putNumber("FBAlign kVelo", 0.0);
+         SmartDashboard.putNumber("FBAlign kAccel", 0.0);
  
-        //  //HotRefreshLRAlignPID
-        //  SmartDashboard.putNumber("LRAlign kP", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kI", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kD", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kAccel", 0.0);
+         //HotRefreshLRAlignPID
+         SmartDashboard.putNumber("LRAlign kP", 0.0);
+         SmartDashboard.putNumber("LRAlign kI", 0.0);
+         SmartDashboard.putNumber("LRAlign kD", 0.0);
+         SmartDashboard.putNumber("LRAlign kVelo", 0.0);
+         SmartDashboard.putNumber("LRAlign kAccel", 0.0);
  
          //HotRefreshRotAlignPID
-        //  SmartDashboard.putNumber("RotAlign kP", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kI", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kD", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kAccel", 0.0);
+         SmartDashboard.putNumber("RotAlign kP", 0.0);
+         SmartDashboard.putNumber("RotAlign kI", 0.0);
+         SmartDashboard.putNumber("RotAlign kD", 0.0);
+         SmartDashboard.putNumber("RotAlign kVelo", 0.0);
+         SmartDashboard.putNumber("RotAlign kAccel", 0.0);
      }    
  
      @Override
      public void initialize() {
          System.out.println("DrivetrainPoseAlign Online");
  
-        //  HotRefreshFBAlignPID();
-        //  HotRefreshLRAlignPID();
-        //  HotRefreshRotAlignPID();
+         HotRefreshFBAlignPID();
+         HotRefreshLRAlignPID();
+         HotRefreshRotAlignPID();
 
         FBPositionHasReset = false;
         LRPositionHasReset = false;
@@ -106,8 +112,14 @@ package frc.robot.commands;
  
          //LR Speed Calculation
          double LRSpeed;
+         double goal;
          if (visionManager.deriveLRPose() != 0.0) {
-            double goal = isRight ? 0.1775 : -0.1775; // Set goal based on alignment side
+            if(this.targetPosition == ALIGN_STATES.LEFT)
+                goal = -0.1775;
+            else if(this.targetPosition == ALIGN_STATES.RIGHT)
+                goal = 0.1775;
+            else
+                goal = 0;
              LRSpeed = -LRPIDController.calculate(visionManager.deriveLRPose(), goal);
          } else {
              LRSpeed = 0.0;
