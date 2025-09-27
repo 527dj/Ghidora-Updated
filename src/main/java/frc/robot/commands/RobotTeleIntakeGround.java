@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -94,6 +96,13 @@ public class RobotTeleIntakeGround extends Command {
             Constants.Absolute_Zero);
         }
         SmartDashboard.putNumber("Current Intake Wrist Position: ",Intake.getInstance().getIntakeWristEncoder());
+        //Error Checking
+        if(intakeSetpoint == Constants.Intake_Between_Setpoint)
+            System.out.println("INTAKE BETWEEN: "+ Intake.getInstance().getRollerCurrent());
+        else if(intakeSetpoint == Constants.Intake_Ground_Deploy_Setpoint)
+            System.out.println("INTAKE GROUND DEPLOY"+ Intake.getInstance().getRollerCurrent());
+        else if(intakeSetpoint == Constants.Intake_Stow_Setpoint)
+            System.out.println("INTAKE STOWED"+ Intake.getInstance().getRollerCurrent());
         // PID Control
         intake.goToIntakeWristSetpoint(intakeSetpoint);
         endEffector.goToEndEffectorWristSetpoint();
