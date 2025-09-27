@@ -97,12 +97,12 @@ public class RobotTeleIntakeGround extends Command {
         }
         SmartDashboard.putNumber("Current Intake Wrist Position: ",Intake.getInstance().getIntakeWristEncoder());
         //Error Checking
-        if(intakeSetpoint == Constants.Intake_Between_Setpoint)
-            System.out.println("INTAKE BETWEEN: "+ Intake.getInstance().getRollerCurrent());
-        else if(intakeSetpoint == Constants.Intake_Ground_Deploy_Setpoint)
-            System.out.println("INTAKE GROUND DEPLOY"+ Intake.getInstance().getRollerCurrent());
-        else if(intakeSetpoint == Constants.Intake_Stow_Setpoint)
-            System.out.println("INTAKE STOWED"+ Intake.getInstance().getRollerCurrent());
+        // if(intakeSetpoint == Constants.Intake_Between_Setpoint)
+        //     System.out.println("INTAKE BETWEEN: "+ Intake.getInstance().getRollerCurrent());
+        // else if(intakeSetpoint == Constants.Intake_Ground_Deploy_Setpoint)
+        //     System.out.println("INTAKE GROUND DEPLOY"+ Intake.getInstance().getRollerCurrent());
+        // else if(intakeSetpoint == Constants.Intake_Stow_Setpoint)
+        //     System.out.println("INTAKE STOWED"+ Intake.getInstance().getRollerCurrent());
         // PID Control
         intake.goToIntakeWristSetpoint(intakeSetpoint);
         endEffector.goToEndEffectorWristSetpoint();

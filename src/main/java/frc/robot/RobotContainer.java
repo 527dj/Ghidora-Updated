@@ -31,6 +31,7 @@ import frc.robot.commands.RobotIntakeGround;
 import frc.robot.commands.RobotPrepScore;
 import frc.robot.commands.RobotStationIntake;
 import frc.robot.commands.RobotTeleIntakeGround;
+import frc.robot.commands.ScoreL1;
 import frc.robot.commands.SuperIntake;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroEndEffectorWrist;
@@ -65,14 +66,13 @@ public class RobotContainer {
     public RobotContainer() {
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
-        //NamedCommands.registerCommand("DrivetrainLeftAlign", new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
         NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.RIGHT));
         NamedCommands.registerCommand("DrivetrainMiddleAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.MIDDLE));
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
         NamedCommands.registerCommand("EndEffectorScore", new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
         NamedCommands.registerCommand("GroundIntake", new RobotIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint));
-
+        NamedCommands.registerCommand("BottomAlgaeRemoval", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Remove_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Bottom_Algae_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
         //====================Zeroing====================
         NamedCommands.registerCommand("RobotHome", new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
         NamedCommands.registerCommand("EndEffectorStop", new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
@@ -127,7 +127,7 @@ public class RobotContainer {
         );
         //====================End Effector Run====================
         driverController.rightTrigger().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
-        driverController.rightTrigger().onFalse(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+        driverController.rightTrigger().and(operatorController.povDown()).negate().onTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
 
         //======================Algae Intake=======================
         driverController.a().whileTrue(new AlgaeNetScore(EndEffector.getInstance(), Constants.End_Effector_Algae_Score_Speed, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
@@ -221,11 +221,14 @@ public class RobotContainer {
         // operatorController.a().onFalse(new SuperIntake(Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero));
 
         //====================Spit L1=====================
-        // operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed));
-        // operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
-
+        driverController.povDown().whileTrue(
+            Commands.parallel(    
+            new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint),
+            new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed)
+            )
+        );
         //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
-        operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
+        //operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
     }
 
         public Command getAutonomousCommand() {

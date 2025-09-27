@@ -41,35 +41,35 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
-         //HotRefreshFBAlignPID
-         SmartDashboard.putNumber("FBAlign kP", 0.0);
-         SmartDashboard.putNumber("FBAlign kI", 0.0);
-         SmartDashboard.putNumber("FBAlign kD", 0.0);
-         SmartDashboard.putNumber("FBAlign kVelo", 0.0);
-         SmartDashboard.putNumber("FBAlign kAccel", 0.0);
+        //  //HotRefreshFBAlignPID
+        //  SmartDashboard.putNumber("FBAlign kP", 0.0);
+        //  SmartDashboard.putNumber("FBAlign kI", 0.0);
+        //  SmartDashboard.putNumber("FBAlign kD", 0.0);
+        //  SmartDashboard.putNumber("FBAlign kVelo", 0.0);
+        //  SmartDashboard.putNumber("FBAlign kAccel", 0.0);
  
-         //HotRefreshLRAlignPID
-         SmartDashboard.putNumber("LRAlign kP", 0.0);
-         SmartDashboard.putNumber("LRAlign kI", 0.0);
-         SmartDashboard.putNumber("LRAlign kD", 0.0);
-         SmartDashboard.putNumber("LRAlign kVelo", 0.0);
-         SmartDashboard.putNumber("LRAlign kAccel", 0.0);
+        //  //HotRefreshLRAlignPID
+        //  SmartDashboard.putNumber("LRAlign kP", 0.0);
+        //  SmartDashboard.putNumber("LRAlign kI", 0.0);
+        //  SmartDashboard.putNumber("LRAlign kD", 0.0);
+        //  SmartDashboard.putNumber("LRAlign kVelo", 0.0);
+        //  SmartDashboard.putNumber("LRAlign kAccel", 0.0);
  
-         //HotRefreshRotAlignPID
-         SmartDashboard.putNumber("RotAlign kP", 0.0);
-         SmartDashboard.putNumber("RotAlign kI", 0.0);
-         SmartDashboard.putNumber("RotAlign kD", 0.0);
-         SmartDashboard.putNumber("RotAlign kVelo", 0.0);
-         SmartDashboard.putNumber("RotAlign kAccel", 0.0);
+        //  //HotRefreshRotAlignPID
+        //  SmartDashboard.putNumber("RotAlign kP", 0.0);
+        //  SmartDashboard.putNumber("RotAlign kI", 0.0);
+        //  SmartDashboard.putNumber("RotAlign kD", 0.0);
+        //  SmartDashboard.putNumber("RotAlign kVelo", 0.0);
+        //  SmartDashboard.putNumber("RotAlign kAccel", 0.0);
      }    
  
      @Override
      public void initialize() {
          System.out.println("DrivetrainPoseAlign Online");
  
-         HotRefreshFBAlignPID();
-         HotRefreshLRAlignPID();
-         HotRefreshRotAlignPID();
+        //  HotRefreshFBAlignPID();
+        //  HotRefreshLRAlignPID();
+        //  HotRefreshRotAlignPID();
 
         FBPositionHasReset = false;
         LRPositionHasReset = false;
