@@ -6,6 +6,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.VisionManager;
 import frc.robot.commands.RobotHome;
 import frc.robot.commands.IntakeRunCmd;
 import frc.robot.commands.IntakeWristJog;
+import frc.robot.commands.IntakeWristSetpoint;
 import frc.robot.commands.RobotAlgaeIntake;
 import frc.robot.commands.RobotAutoPrepScore;
 import frc.robot.subsystems.EndEffector;
@@ -33,6 +35,7 @@ import frc.robot.commands.SuperIntake;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroEndEffectorWrist;
 import frc.robot.commands.ZeroIntakeWrist;
+import frc.robot.commands.DrivetrainRightAlign.ALIGN_STATES;
 import frc.robot.commands.EndEffectorScore;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.ElevatorJog;
@@ -40,7 +43,6 @@ import frc.robot.subsystems.Climb;
 import frc.robot.commands.AlgaeNetScore;
 import frc.robot.commands.ClimbRollerRun;
 import frc.robot.commands.ClimbWristRun;
-import frc.robot.commands.DrivetrainLeftAlign;
 //Limelight Imports
 import frc.robot.commands.DrivetrainRightAlign;
 import frc.robot.commands.DrivetrainReefAutoAlignProfiled;
@@ -64,8 +66,8 @@ public class RobotContainer {
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
         //NamedCommands.registerCommand("DrivetrainLeftAlign", new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
-        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),true));
-
+        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.RIGHT));
+        NamedCommands.registerCommand("DrivetrainMiddleAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.MIDDLE));
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
         NamedCommands.registerCommand("EndEffectorScore", new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
@@ -100,16 +102,14 @@ public class RobotContainer {
         driverController.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         //====================Align Left====================
-        driverController.leftBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),false));
-
+        driverController.leftBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.LEFT));
         //====================Align Right====================
-        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), true));
+        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
         //====================Ground Intake====================
-        double intakePos=Constants.Intake_Stow_Setpoint;
         BooleanSupplier hasGamePiece = () -> Intake.getInstance().getRollerCurrent() > Constants.INTAKE_CURRENT_SPIKE;
         Trigger intakeSpiked = new Trigger(hasGamePiece);
-        intakePos = intakeSpiked.debounce(0.5).getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
-        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), intakePos, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
+        DoubleSupplier intakePos =() -> intakeSpiked.debounce(0.01).getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
+        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), intakePos.getAsDouble(), Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
         driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
@@ -221,8 +221,11 @@ public class RobotContainer {
         // operatorController.a().onFalse(new SuperIntake(Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero));
 
         //====================Spit L1=====================
-        operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed));
-        operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+        // operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L1_Coral_Speed));
+        // operatorController.povDown().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+
+        //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
+        operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
     }
 
         public Command getAutonomousCommand() {

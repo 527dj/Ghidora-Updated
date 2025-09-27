@@ -71,8 +71,8 @@ public class Constants {
 
     //Intake Current Limits
     public static final double Intake_Wrist_Current_Limit = 80.0;
-    public static final double Intake_Roller_Current_Limit = 80.0;
-    public static final double INTAKE_CURRENT_SPIKE = 90;
+    public static final double Intake_Roller_Current_Limit = 100.0;
+    public static final double INTAKE_CURRENT_SPIKE = 60;
 
     //Intake Speeds
     public static final double Intake_Ground_Run_Speed = 0.75;
@@ -83,6 +83,7 @@ public class Constants {
     public static final double Intake_Stow_Setpoint = -6.7;
     public static final double Intake_Ground_Deploy_Setpoint = -11;
     public static final double Intake_Between_Setpoint = -9;
+    public static final double IntakeHighStow = -5;
 
     //====================End Effector====================
     //End Effector Motion Magic
