@@ -36,8 +36,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          this.drivetrain = drivetrain;
          this.visionManager = VisionManager.getInstance();
         this.targetPosition = targetPosition;
-        FBPIDController.setTolerance(0.1);
-        LRPIDController.setTolerance(0.1);
+        FBPIDController.setTolerance(0.05);
+        LRPIDController.setTolerance(0.05);
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
