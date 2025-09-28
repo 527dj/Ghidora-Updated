@@ -99,6 +99,10 @@ public class EndEffector extends SubsystemBase {
         this.setpoint = setpoint;
     }
 
+    public void changeMotionMagic(MotionMagicConfigs configs) {
+        End_Effector_Wrist_Motor.getConfigurator().apply(configs);
+    }
+
     public void goToEndEffectorWristSetpoint() {
         final MotionMagicVoltage m_request = new MotionMagicVoltage(Constants.Absolute_Zero).withEnableFOC(true);
         End_Effector_Wrist_Motor.setControl(m_request.withPosition(-1 * this.setpoint));

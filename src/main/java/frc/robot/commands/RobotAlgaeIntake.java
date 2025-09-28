@@ -1,6 +1,8 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
@@ -40,6 +42,10 @@ public class RobotAlgaeIntake extends Command {
         endEffector.setEndEffectorWristSetpoint(endEffectorSetpoint);
         elevator.setElevatorSetpoint(elevatorSetpoint);
         System.out.println("RobotAlgaeIntake Online");
+        MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slow;
+        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slow;
+        endEffector.changeMotionMagic(motionMagicConfigs);
     }
 
     @Override
@@ -47,13 +53,16 @@ public class RobotAlgaeIntake extends Command {
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();
         drivetrain.slowDrivetrain(controller, speedMultiplier, turnMultiplier);
-
         endEffector.setEndEffectorRollerMotorSpeed(endEffectorSpeed);
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("RobotAlgaeIntake Offline");
+        MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity;
+        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration;
+        endEffector.changeMotionMagic(motionMagicConfigs);
     }
 
     @Override

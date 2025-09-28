@@ -81,7 +81,7 @@ public class Constants {
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
     public static final double Intake_Stow_Setpoint = -6.7;
-    public static final double Intake_Ground_Deploy_Setpoint = -11;
+    public static final double Intake_Ground_Deploy_Setpoint = -10;
     public static final double Intake_Between_Setpoint = -9;
     public static final double IntakeHighStow = -5;
 
@@ -92,6 +92,9 @@ public class Constants {
     public static final double End_Effector_Wrist_kD = 0.03;
     public static final double End_Effector_Wrist_Velocity = 300.0; //150
     public static final double End_Effector_Wrist_Acceleration   = 600.0; //300
+    public static final double End_Effector_Wrist_Velocity_Slow = 150;
+    public static final double End_Effector_Wrist_Acceleration_Slow = 300;
+
 
     //End Effector Current Limits
     public static final double End_Effector_Wrist_Current_Limit = 80.0;
