@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -14,7 +15,6 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
     private final TalonFX Elevator_Master_Motor = new TalonFX(Devices.ELEVATOR_MASTER_MOTOR);
     private final TalonFX Elevator_Slave_Motor = new TalonFX(Devices.ELEVATOR_SLAVE_MOTOR);
-
     private double setpoint;
 
     public static Elevator getInstance() {
@@ -25,7 +25,6 @@ public class Elevator extends SubsystemBase {
 
     public Elevator() {
         System.out.println("====================Elevator Subsystem Online====================");
-
         //HotRefreshElevatorConfig
         // SmartDashboard.putNumber("Elevator kG", 0.0);
         // SmartDashboard.putNumber("Elevator kP", 0.0);
