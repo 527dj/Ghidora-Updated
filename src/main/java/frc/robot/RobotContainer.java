@@ -65,7 +65,7 @@ public class RobotContainer {
     public RobotContainer() {
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
-        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.RIGHT));
+        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
         NamedCommands.registerCommand("DrivetrainMiddleAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.MIDDLE));
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
@@ -108,8 +108,8 @@ public class RobotContainer {
         BooleanSupplier hasGamePiece = () -> Intake.getInstance().getRollerCurrent() > Constants.INTAKE_CURRENT_SPIKE;
         Trigger intakeSpiked = new Trigger(hasGamePiece);
         DoubleSupplier intakePos =() -> intakeSpiked.debounce(0.01).getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
-        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), intakePos.getAsDouble(), Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID()));
-        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID()));
+        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), intakePos.getAsDouble(), Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID(), operatorController.getHID()));
+        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID(),operatorController.getHID()));
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
                 Commands.parallel(    
@@ -205,15 +205,15 @@ public class RobotContainer {
         operatorController.y().onTrue(new ZeroElevator(Elevator.getInstance()));
 
         // //====================End Effector Wrist Jog=====================
-        operatorController.povRight().whileTrue(new EndEffectorWristJog(EndEffector.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
+        // operatorController.povRight().whileTrue(new EndEffectorWristJog(EndEffector.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
 
         // //====================End Effector Wrist Manual Zero=====================
-        operatorController.b().onTrue(new ZeroEndEffectorWrist(EndEffector.getInstance()));
+        // operatorController.b().onTrue(new ZeroEndEffectorWrist(EndEffector.getInstance()));
 
         // //====================Intake Wrist Jog=====================
-        operatorController.povLeft().whileTrue(new IntakeWristJog(Intake.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
-        //====================Intake Wrist Manual Zero=====================
-        operatorController.x().onTrue(new ZeroIntakeWrist(Intake.getInstance()));
+        // operatorController.povLeft().whileTrue(new IntakeWristJog(Intake.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
+        // //====================Intake Wrist Manual Zero=====================
+        // operatorController.x().onTrue(new ZeroIntakeWrist(Intake.getInstance()));
 
         //====================Super Intake=====================
         // operatorController.a().whileTrue(new SuperIntake(Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, 0.5 * Constants.Intake_Ground_Run_Speed));

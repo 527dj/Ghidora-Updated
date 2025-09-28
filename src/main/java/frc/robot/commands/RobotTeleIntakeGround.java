@@ -24,10 +24,11 @@ public class RobotTeleIntakeGround extends Command {
     private final double elevatorSetpoint;
 
     private final XboxController controller;
+    private final XboxController opController;
 
     public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint, Intake intake,
             double intakeSetpoint, double intakeSpeed, Elevator elevator, double elevatorSetpoint,
-            XboxController controller) {
+            XboxController controller, XboxController opController) {
         this.speed = speed;
         this.endEffector = EndEffector.getInstance();
         this.setpoint = setpoint;
@@ -40,6 +41,7 @@ public class RobotTeleIntakeGround extends Command {
         this.elevatorSetpoint = elevatorSetpoint;
 
         this.controller = controller;
+        this.opController = opController;
 
         addRequirements(elevator);
         addRequirements(endEffector);
@@ -86,6 +88,10 @@ public class RobotTeleIntakeGround extends Command {
             Devices.CONTROLLER_RUMBLE);
             controller.setRumble(XboxController.RumbleType.kRightRumble,
             Devices.CONTROLLER_RUMBLE);
+            opController.setRumble(XboxController.RumbleType.kLeftRumble,
+            Devices.CONTROLLER_RUMBLE);
+            opController.setRumble(XboxController.RumbleType.kRightRumble,
+            Devices.CONTROLLER_RUMBLE);
         } 
         else {
             endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
@@ -93,6 +99,10 @@ public class RobotTeleIntakeGround extends Command {
             controller.setRumble(XboxController.RumbleType.kLeftRumble,
             Constants.Absolute_Zero);
             controller.setRumble(XboxController.RumbleType.kRightRumble,
+            Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kLeftRumble,
+            Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kRightRumble,
             Constants.Absolute_Zero);
         }
         SmartDashboard.putNumber("Current Intake Wrist Position: ",Intake.getInstance().getIntakeWristEncoder());
@@ -117,6 +127,8 @@ public class RobotTeleIntakeGround extends Command {
 
         controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
         controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        opController.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        opController.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
 
         System.out.println("RobotTeleIntakeGround Offline");
     }
