@@ -1,8 +1,12 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.Intake;
@@ -79,7 +83,10 @@ public class RobotTeleIntakeGround extends Command {
         // }
 
         // OLD
-        if (endEffector.getEndEffectorFrontPhotoElectricReading() == true) {
+        BooleanSupplier hasGamePiece = () -> endEffector.getEndEffectorFrontPhotoElectricReading()==true;
+        Trigger inPhotoE  = new Trigger(hasGamePiece);
+        BooleanSupplier detected =() -> inPhotoE.debounce(0.1).getAsBoolean() ? true : false;
+        if (detected.getAsBoolean()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
 
             controller.setRumble(XboxController.RumbleType.kLeftRumble,
