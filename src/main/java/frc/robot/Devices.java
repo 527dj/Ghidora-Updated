@@ -10,7 +10,7 @@ public final class Devices {
 
     //====================Intake/Indexer====================
     public static final int INTAKE_WRIST_MOTOR = 14;
-    public static final int INTAKE_ROLLER_MOTOR = 15;
+    public static final int INTAKE_ROLLER_MOTOR = 30;
     public static final int INDEXER_MOTOR = 16;
     public static final int INTAKE_WRIST_THROUGH_BORE_PORT = 7; //THIS IS CORRECT
     //public static final int INDEXER_PHOTOELECTRIC_PORT = 7; 
@@ -27,5 +27,5 @@ public final class Devices {
 
     //====================Climb====================
     public static final int CLIMB_WRIST_MOTOR = 21;
-    public static final int CLIMB_ROLLER_MOTOR = 22;
+    public static final int CLIMB_ROLLER_MOTOR = 5;
 }

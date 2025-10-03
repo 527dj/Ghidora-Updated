@@ -3,6 +3,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -18,7 +19,6 @@ public class Intake extends SubsystemBase {
     private final TalonFX Intake_Wrist_Motor = new TalonFX(Devices.INTAKE_WRIST_MOTOR);
     private final TalonFX Intake_Roller_Motor = new TalonFX(Devices.INTAKE_ROLLER_MOTOR);
     private final TalonFX Intake_Indexer_Master_Motor = new TalonFX(Devices.INDEXER_MOTOR);
-
     private final AbsoluteEncoder encoder = new AbsoluteEncoder(Devices.INTAKE_WRIST_THROUGH_BORE_PORT);
 
     private double setpoint;
@@ -31,7 +31,6 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         System.out.println("====================Intake Subsystem Online====================");
-
         //HotRegreshIntakeConfig
         // SmartDashboard.putNumber("Intake kG", 0.0);
         // SmartDashboard.putNumber("Intake kP", 0.0);
@@ -48,9 +47,7 @@ public class Intake extends SubsystemBase {
         //encoder.setInverted(false);
         //encoder.setOffset(Rotation2d.fromRotations(Constants.Intake_Wrist_Through_Bore_Offset));
 
-        //Brake Mode
         intakeWristMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
         //General Configurations
         var generalSlotConfigs = intakeWristMotorConfigs.Slot0;
         generalSlotConfigs.kP = Constants.Intake_Wrist_kP;
@@ -59,8 +56,8 @@ public class Intake extends SubsystemBase {
 
         //Motion Magic
         var motionMagicConfigs = intakeWristMotorConfigs.MotionMagic;
-        // motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Intake_Wrist_Velocity;
-        // motionMagicConfigs.MotionMagicAcceleration = Constants.Intake_Wrist_Acceleration;
+        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Intake_Wrist_Velocity;
+        motionMagicConfigs.MotionMagicAcceleration = Constants.Intake_Wrist_Acceleration;
 
         //Current Limits
         var intakeWristLimitConfigs = intakeWristMotorConfigs.CurrentLimits;
@@ -103,6 +100,10 @@ public class Intake extends SubsystemBase {
         return Intake_Wrist_Motor.getVelocity().getValueAsDouble();
     }
 
+    public double getRollerCurrent(){
+        return Intake_Roller_Motor.getStatorCurrent().getValueAsDouble();
+    }
+
     // public void zeroIntakeWristWithAbsolute() {
     //     Intake_Wrist_Motor.setPosition(getIntakeWristThroughBoreWithOffset());
     // }
@@ -115,9 +116,11 @@ public class Intake extends SubsystemBase {
         this.setpoint = setpoint;
     }
 
-    public void goToIntakeWristSetpoint() {
-        final MotionMagicVoltage m_request = new MotionMagicVoltage(Constants.Absolute_Zero).withEnableFOC(true);
-        Intake_Wrist_Motor.setControl(m_request.withPosition(this.setpoint));
+    public void goToIntakeWristSetpoint(double setpoint) {
+        final MotionMagicVoltage m_request = new MotionMagicVoltage(setpoint).withEnableFOC(true);
+        Intake_Wrist_Motor.setControl(m_request);
+        SmartDashboard.putNumber("Wrist Setpoint", setpoint);
+
     }
 
     public void setIntakeWristSpeed(double speed) {
@@ -133,7 +136,7 @@ public class Intake extends SubsystemBase {
     public void setIndexerMotorSpeed(double speed) {
         Intake_Indexer_Master_Motor.set(speed);
     }
-
+    
     // public void HotRegreshIntakeConfig() {
     //     //General Configurations
     //     var generalSlotConfigs = new Slot0Configs();

@@ -3,6 +3,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -15,7 +16,6 @@ import frc.robot.Constants;
 public class EndEffector extends SubsystemBase {
     private final TalonFX End_Effector_Wrist_Motor = new TalonFX(Devices.END_EFFECTOR_WRIST_MOTOR);
     private final TalonFX End_Effector_Top_Roller_Motor = new TalonFX(Devices.END_EFFECTOR_ROLLER_MOTOR);
-
     private final DigitalInput End_Effector_Front_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_FRONT_PORT);
     private final DigitalInput End_Effector_Back_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_BACK_PORT);
 
@@ -29,7 +29,6 @@ public class EndEffector extends SubsystemBase {
 
     public EndEffector() {
         System.out.println("====================EndEffector Subsystem Online====================");
-
         //HotRefreshEndEffectorConfig
         // SmartDashboard.putNumber("End Effector kG", 0.0);
         // SmartDashboard.putNumber("End Effector kP", 0.0);
@@ -98,6 +97,10 @@ public class EndEffector extends SubsystemBase {
 
     public void setEndEffectorWristSetpoint(double setpoint) {
         this.setpoint = setpoint;
+    }
+
+    public void changeMotionMagic(MotionMagicConfigs configs) {
+        End_Effector_Wrist_Motor.getConfigurator().apply(configs);
     }
 
     public void goToEndEffectorWristSetpoint() {

@@ -1,9 +1,13 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.Intake;
@@ -16,17 +20,17 @@ public class RobotTeleIntakeGround extends Command {
     private final double setpoint;
 
     private final Intake intake;
-    private final double intakeSetpoint;
+    private double intakeSetpoint;
     private final double intakeSpeed;
 
     private final Elevator elevator;
     private final double elevatorSetpoint;
 
-    private final GenericHID controller;
+    private final XboxController controller;
 
     public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint, Intake intake,
             double intakeSetpoint, double intakeSpeed, Elevator elevator, double elevatorSetpoint,
-            GenericHID controller) {
+            XboxController controller) {
         this.speed = speed;
         this.endEffector = EndEffector.getInstance();
         this.setpoint = setpoint;
@@ -39,10 +43,13 @@ public class RobotTeleIntakeGround extends Command {
         this.elevatorSetpoint = elevatorSetpoint;
 
         this.controller = controller;
+        this.opController = opController;
 
-        addRequirements(elevator);
-        addRequirements(endEffector);
-        addRequirements(intake);
+        BooleanSupplier isIntakeIn = () -> this.intake.getRollerCurrent()>60;
+        BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
+        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.05);
+        this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
+        addRequirements(this.elevator, this.endEffector, this.intake);
     }
 
     @Override
@@ -57,39 +64,47 @@ public class RobotTeleIntakeGround extends Command {
     public void execute() {
         // Roller Control
         intake.setIntakeRollerMotorSpeed(intakeSpeed);
-        intake.setIndexerMotorSpeed(intakeSpeed);
+        intake.setIndexerMotorSpeed(-intakeSpeed);
 
         double motorSpeed = speed;
 
         endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
-        // Handle rumble for both PS5 and Xbox controllers
-        if (endEffector.getEndEffectorFrontPhotoElectricReading() == true) {
-            endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+        // if (endEffector.getEndEffectorFrontPhotoElectricReading() == true && endEffector.getEndEffectorBackPhotoElectricReading() == true) {
+        //     endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
+        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
+        // } else if (endEffector.getEndEffectorFrontPhotoElectricReading() == false && endEffector.getEndEffectorBackPhotoElectricReading() == true) {
+        //     endEffector.setEndEffectorRollerMotorSpeed(0.5 * motorSpeed);
+        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        // } else {
+        //     endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
+        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        // }
 
-            // Set rumble based on controller type
-            if (controller instanceof XboxController) {
-                ((XboxController) controller).setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
-                ((XboxController) controller).setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
-            } else if (controller instanceof PS5Controller) {
-                ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
-                ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
-            }
+        // OLD
+        if (endEffector.getEndEffectorFrontPhotoElectricReading() == true) {
+        endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+
+        controller.setRumble(XboxController.RumbleType.kLeftRumble,
+        Devices.CONTROLLER_RUMBLE);
+        controller.setRumble(XboxController.RumbleType.kRightRumble,
+        Devices.CONTROLLER_RUMBLE);
         } else {
             endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
-            // Stop rumble based on controller type
-            if (controller instanceof XboxController) {
-                ((XboxController) controller).setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-                ((XboxController) controller).setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
-            } else if (controller instanceof PS5Controller) {
-                ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-                ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kRightRumble, Constants.Absolute_Zero);
-            }
+        controller.setRumble(XboxController.RumbleType.kLeftRumble,
+        Constants.Absolute_Zero);
+        controller.setRumble(XboxController.RumbleType.kRightRumble,
+        Constants.Absolute_Zero);
         }
 
+        SmartDashboard.putNumber("Current Intake Wrist Position: ", intake.getIntakeWristEncoder());
+
         // PID Control
-        intake.goToIntakeWristSetpoint();
+        intake.goToIntakeWristSetpoint(intakeSetpoint);
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();
     }
@@ -99,15 +114,10 @@ public class RobotTeleIntakeGround extends Command {
         intake.setIntakeRollerMotorSpeed(Constants.Absolute_Zero);
         intake.setIndexerMotorSpeed(Constants.Absolute_Zero);
         endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+        intake.goToIntakeWristSetpoint(Constants.Intake_Stow_Setpoint);
 
-        // Stop rumble based on controller type
-        if (controller instanceof XboxController) {
-            ((XboxController) controller).setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-            ((XboxController) controller).setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
-        } else if (controller instanceof PS5Controller) {
-            ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-            ((PS5Controller) controller).setRumble(PS5Controller.RumbleType.kRightRumble, Constants.Absolute_Zero);
-        }
+        controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+        controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
 
         System.out.println("RobotTeleIntakeGround Offline");
     }

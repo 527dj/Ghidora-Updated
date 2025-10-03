@@ -22,7 +22,7 @@ public class IntakeRunCmd extends Command {
     public void execute() {
         double motorSpeed = speed;
         intake.setIntakeRollerMotorSpeed(motorSpeed);
-        intake.setIndexerMotorSpeed(motorSpeed);
+        intake.setIndexerMotorSpeed(-motorSpeed);
     }
 
     @Override

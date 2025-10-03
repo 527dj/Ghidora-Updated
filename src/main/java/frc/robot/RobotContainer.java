@@ -1,19 +1,21 @@
 package frc.robot;
-import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS5Controller;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+=======
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+>>>>>>> events-chezy
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -21,6 +23,7 @@ import frc.robot.subsystems.VisionManager;
 import frc.robot.commands.RobotHome;
 import frc.robot.commands.IntakeRunCmd;
 import frc.robot.commands.IntakeWristJog;
+import frc.robot.commands.IntakeWristSetpoint;
 import frc.robot.commands.RobotAlgaeIntake;
 import frc.robot.commands.RobotAutoPrepScore;
 import frc.robot.subsystems.EndEffector;
@@ -29,10 +32,12 @@ import frc.robot.commands.RobotIntakeGround;
 import frc.robot.commands.RobotPrepScore;
 import frc.robot.commands.RobotStationIntake;
 import frc.robot.commands.RobotTeleIntakeGround;
+import frc.robot.commands.ScoreL1;
 import frc.robot.commands.SuperIntake;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.commands.ZeroEndEffectorWrist;
 import frc.robot.commands.ZeroIntakeWrist;
+import frc.robot.commands.DrivetrainRightAlign.ALIGN_STATES;
 import frc.robot.commands.EndEffectorScore;
 import frc.robot.subsystems.Elevator;
 import frc.robot.commands.ElevatorJog;
@@ -40,9 +45,9 @@ import frc.robot.subsystems.Climb;
 import frc.robot.commands.AlgaeNetScore;
 import frc.robot.commands.ClimbRollerRun;
 import frc.robot.commands.ClimbWristRun;
-//import frc.robot.commands.DrivetrainLeftAlign;
 //Limelight Imports
 import frc.robot.commands.DrivetrainRightAlign;
+import frc.robot.commands.DrivetrainReefAutoAlignProfiled;
 
 public class RobotContainer {
     //====================CONTROLLER SELECTION SETUP====================
@@ -55,11 +60,17 @@ public class RobotContainer {
     private final SendableChooser<ControllerType> operatorControllerChooser;
     
     //====================GENERAL SETUP====================
+<<<<<<< HEAD
     //private final SendableChooser<Command> autoChooser;
     private final CommandPS5Controller driverPS5Controller = new CommandPS5Controller(Devices.DRIVER_CONTROLLER_PORT);
     private final CommandXboxController driverXboxController = new CommandXboxController(Devices.DRIVER_CONTROLLER_PORT);
     private final CommandPS5Controller operatorPS5Controller = new CommandPS5Controller(Devices.OPERATOR_CONTROLLER);
     private final CommandXboxController operatorXboxController = new CommandXboxController(Devices.OPERATOR_CONTROLLER);
+=======
+    private final SendableChooser<Command> autoChooser;
+    private final CommandXboxController driverController = new CommandXboxController(Devices.DRIVER_CONTROLLER_PORT);
+    private final CommandXboxController operatorController = new CommandXboxController(Devices.OPERATOR_CONTROLLER);
+>>>>>>> events-chezy
 
     //====================SWERVE SETUP====================
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -84,14 +95,13 @@ public class RobotContainer {
 
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
-        //NamedCommands.registerCommand("DrivetrainLeftAlign", new DrivetrainLeftAlign(drivetrain, VisionManager.getInstance()));
-        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance()));
-
+        NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
+        NamedCommands.registerCommand("DrivetrainMiddleAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.MIDDLE));
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
         NamedCommands.registerCommand("EndEffectorScore", new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
         NamedCommands.registerCommand("GroundIntake", new RobotIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint));
-
+        NamedCommands.registerCommand("BottomAlgaeRemoval", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Remove_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Bottom_Algae_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
         //====================Zeroing====================
         NamedCommands.registerCommand("RobotHome", new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
         NamedCommands.registerCommand("EndEffectorStop", new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
@@ -99,8 +109,8 @@ public class RobotContainer {
 
         configureBindings();
 
-        //autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
-        //SmartDashboard.putData("Auto Mode", autoChooser);
+        autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
     private void configureBindings() {
@@ -141,6 +151,7 @@ public class RobotContainer {
         // driverPS5Controller.options().and(driverPS5Controller.square()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         //====================Swerve Heading Reset====================
+<<<<<<< HEAD
         driverPS5Controller.pov(180).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         //====================Align Right====================
@@ -150,6 +161,17 @@ public class RobotContainer {
         driverPS5Controller.L2().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverPS5Controller.getHID()));
         driverPS5Controller.L2().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverPS5Controller.getHID()));
 
+=======
+        driverController.povDown().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        //====================Align Left====================
+        driverController.leftBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.LEFT));
+        //====================Align Right====================
+        driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
+        //====================Ground Intake====================
+        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID(), operatorController.getHID()));
+        driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID(),operatorController.getHID()));
+>>>>>>> events-chezy
         //====================Ground Outtake====================
         driverPS5Controller.pov(0).whileTrue(
                 Commands.parallel(    
@@ -164,6 +186,7 @@ public class RobotContainer {
                 new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero)
                 )
         );
+<<<<<<< HEAD
 
         //====================End Effector Run====================
         driverPS5Controller.R2().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
@@ -184,6 +207,27 @@ public class RobotContainer {
         //====================Level 4 Coral Score====================
         driverPS5Controller.triangle().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverPS5Controller.getHID()));
         driverPS5Controller.triangle().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+=======
+        //====================End Effector Run====================
+        driverController.rightTrigger().whileTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.End_Effector_Score_L2_L3_L4_Speed));
+        driverController.rightTrigger().and(operatorController.povDown()).negate().onTrue(new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
+
+        //======================Algae Intake=======================
+        driverController.a().whileTrue(new AlgaeNetScore(EndEffector.getInstance(), Constants.End_Effector_Algae_Score_Speed, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.a().onFalse(new AlgaeNetScore(EndEffector.getInstance(), Constants.Absolute_Zero, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Turn_Multiplier, driverController.getHID()));
+
+        //====================Level 2 Coral Score====================
+        driverController.b().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L2_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.b().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+
+        //====================Level 3 Coral Score====================
+        driverController.x().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L2_L3_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L3_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.x().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+
+        //====================Level 4 Coral Score====================
+        driverController.y().whileTrue(new RobotPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        driverController.y().onFalse(new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
+>>>>>>> events-chezy
 
         //====================Coral Gullet Intake====================
         driverPS5Controller.touchpad().whileTrue(new RobotStationIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Coral_Station_Setpoint, Constants.End_Effector_Coral_Station_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Coral_Station_Setpoint));
@@ -302,8 +346,17 @@ public class RobotContainer {
         operatorPS5Controller.L1().onFalse(new ClimbRollerRun(Climb.getInstance(), Constants.Absolute_Zero));
 
         //====================Elevator Climb + End Effector=====================
+<<<<<<< HEAD
         operatorPS5Controller.cross().whileTrue(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_Start_Setpoint, Elevator.getInstance(), Constants.Elevator_Climb_Setpoint));
         operatorPS5Controller.cross().onFalse(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_End_Setpoint, Elevator.getInstance(), Constants.Absolute_Zero));
+=======
+         operatorController.a().whileTrue(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_Start_Setpoint, Elevator.getInstance(), Constants.Elevator_Climb_Setpoint));
+         operatorController.a().onFalse(new RobotHome(EndEffector.getInstance(), Constants.End_Effector_Wrist_Climb_End_Setpoint, Elevator.getInstance(), Constants.Absolute_Zero));
+
+        //====================Processor=====================
+        //operatorController.x().whileTrue(new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Processor_Score_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Processor_Score_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
+        //operatorController.x().onFalse(new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Stow_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Absolute_Zero, drivetrain, Constants.Drivetrain_Speed_Multiplier, Constants.Drivetrain_Turn_Multiplier, driverController.getHID()));
+>>>>>>> events-chezy
 
         //====================Elevator Jog=====================
         operatorPS5Controller.pov(0).whileTrue(new ElevatorJog(Elevator.getInstance(), () -> {
@@ -314,6 +367,7 @@ public class RobotContainer {
         }));
 
         //====================Elevator Manual Zero=====================
+<<<<<<< HEAD
         operatorPS5Controller.triangle().onTrue(new ZeroElevator(Elevator.getInstance()));
 
         //====================End Effector Wrist Jog=====================
@@ -338,12 +392,27 @@ public class RobotContainer {
         //====================Intake Wrist Manual Zero=====================
         //operatorPS5Controller.square().onTrue(new ZeroIntakeWrist(Intake.getInstance()));
     }
+=======
+        operatorController.y().onTrue(new ZeroElevator(Elevator.getInstance()));
+
+        /// //====================End Effector Wrist Jog=====================
+        // operatorController.povRight().whileTrue(new EndEffectorWristJog(EndEffector.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
+
+        // //====================End Effector Wrist Manual Zero=====================
+        // operatorController.b().onTrue(new ZeroEndEffectorWrist(EndEffector.getInstance()));
+
+        // //====================Intake Wrist Jog=====================
+        // operatorController.povLeft().whileTrue(new IntakeWristJog(Intake.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
+        // //====================Intake Wrist Manual Zero=====================
+        // operatorController.x().onTrue(new ZeroIntakeWrist(Intake.getInstance()));
+>>>>>>> events-chezy
 
     private void configureXboxOperatorBindings() {
         //====================Climb Wrist Up=====================
         operatorXboxController.rightTrigger().whileTrue(new ClimbWristRun(Climb.getInstance(), Constants.Climb_Up_Speed));
         operatorXboxController.rightTrigger().onFalse(new ClimbWristRun(Climb.getInstance(), Constants.Absolute_Zero));
 
+<<<<<<< HEAD
         //====================Climb Wrist Down=====================
         operatorXboxController.rightBumper().whileTrue(new ClimbWristRun(Climb.getInstance(), Constants.Climb_Down_Speed));
         operatorXboxController.rightBumper().onFalse(new ClimbWristRun(Climb.getInstance(), Constants.Absolute_Zero));
@@ -397,4 +466,15 @@ public class RobotContainer {
         // public Command getAutonomousCommand() {
         //     return autoChooser.getSelected();
         // }
+=======
+        //====================Spit L1=====================
+        operatorController.povDown().whileTrue(new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint));
+        //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
+        //operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
+    }
+
+        public Command getAutonomousCommand() {
+            return autoChooser.getSelected();
+        }
+>>>>>>> events-chezy
     }

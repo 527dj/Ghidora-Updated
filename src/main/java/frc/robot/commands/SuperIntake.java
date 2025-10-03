@@ -29,7 +29,8 @@ public class SuperIntake extends Command {
         intake.setIndexerMotorSpeed(intakeSpeed);
 
         //PID Control
-        intake.goToIntakeWristSetpoint();
+        //UNDO 24 LATER
+        intake.goToIntakeWristSetpoint(24);
     }
 
     @Override

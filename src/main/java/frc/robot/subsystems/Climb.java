@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class Climb extends SubsystemBase {
     private final TalonFX Climb_Wrist_Motor = new TalonFX(Devices.CLIMB_WRIST_MOTOR);
     private final TalonFX Climb_Roller_Motor = new TalonFX(Devices.CLIMB_ROLLER_MOTOR);
-
+    
     public static Climb getInstance() {
         return instance;
     }

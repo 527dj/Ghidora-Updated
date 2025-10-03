@@ -1,8 +1,4 @@
 package frc.robot;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -54,14 +50,14 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledExit() {}
 
-  // @Override
-  // public void autonomousInit() {
-  //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  @Override
+  public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  //   if (m_autonomousCommand != null) {
-  //     m_autonomousCommand.schedule();
-  //   }
-  // }
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
+  }
 
   @Override
   public void autonomousPeriodic() {
@@ -80,6 +76,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    
   }
 
   @Override
