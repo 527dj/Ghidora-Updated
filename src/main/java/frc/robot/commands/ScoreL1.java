@@ -22,6 +22,7 @@ public class ScoreL1 extends Command {
     public void execute() {
         endEffector.setEndEffectorWristSetpoint(setpoint);
         endEffector.goToEndEffectorWristSetpoint();
+        endEffector.setEndEffectorRollerMotorSpeed(Constants.End_Effector_Score_L1_Coral_Speed);
     }
 
     @Override

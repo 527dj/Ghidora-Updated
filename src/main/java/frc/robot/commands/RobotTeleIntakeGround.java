@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +18,7 @@ public class RobotTeleIntakeGround extends Command {
     private final double setpoint;
 
     private final Intake intake;
-    private final double intakeSetpoint;
+    private double intakeSetpoint;
     private final double intakeSpeed;
 
     private final Elevator elevator;
@@ -28,9 +27,15 @@ public class RobotTeleIntakeGround extends Command {
     private final XboxController controller;
     private final XboxController opController;
 
-    public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint, Intake intake,
-            double intakeSetpoint, double intakeSpeed, Elevator elevator, double elevatorSetpoint,
+    // Debounced trigger for detecting a game piece
+    private final Trigger gamePieceDetected;
+    private final Trigger inIntake;
+
+    public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint,
+            Intake intake, double intakeSetpoint, double intakeSpeed,
+            Elevator elevator, double elevatorSetpoint,
             XboxController controller, XboxController opController) {
+
         this.speed = speed;
         this.endEffector = EndEffector.getInstance();
         this.setpoint = setpoint;
@@ -45,9 +50,11 @@ public class RobotTeleIntakeGround extends Command {
         this.controller = controller;
         this.opController = opController;
 
-        addRequirements(elevator);
-        addRequirements(endEffector);
-        addRequirements(intake);
+        BooleanSupplier isIntakeIn = () -> this.intake.getRollerCurrent()>60;
+        BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
+        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.05);
+        this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
+        addRequirements(this.elevator, this.endEffector, this.intake);
     }
 
     @Override
@@ -63,61 +70,30 @@ public class RobotTeleIntakeGround extends Command {
         // Roller Control
         intake.setIntakeRollerMotorSpeed(intakeSpeed);
         intake.setIndexerMotorSpeed(-intakeSpeed);
-        //intake.goToIntakeWristSetpoint(setpoint);
+
         double motorSpeed = speed;
 
-        endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
+        intakeSetpoint = inIntake.getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
 
-        // if (endEffector.getEndEffectorFrontPhotoElectricReading() == true && endEffector.getEndEffectorBackPhotoElectricReading() == true) {
-        //     endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
-        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
-        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
-        // } else if (endEffector.getEndEffectorFrontPhotoElectricReading() == false && endEffector.getEndEffectorBackPhotoElectricReading() == true) {
-        //     endEffector.setEndEffectorRollerMotorSpeed(0.5 * motorSpeed);
-        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
-        // } else {
-        //     endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
-        //     controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
-        //     controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
-        // }
-
-        // OLD
-        BooleanSupplier hasGamePiece = () -> endEffector.getEndEffectorFrontPhotoElectricReading()==true;
-        Trigger inPhotoE  = new Trigger(hasGamePiece);
-        BooleanSupplier detected =() -> inPhotoE.debounce(0.1).getAsBoolean() ? true : false;
-        if (detected.getAsBoolean()) {
+        // Debounced photoelectric logic
+        if (gamePieceDetected.getAsBoolean()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
 
-            controller.setRumble(XboxController.RumbleType.kLeftRumble,
-            Devices.CONTROLLER_RUMBLE);
-            controller.setRumble(XboxController.RumbleType.kRightRumble,
-            Devices.CONTROLLER_RUMBLE);
-            opController.setRumble(XboxController.RumbleType.kLeftRumble,
-            Devices.CONTROLLER_RUMBLE);
-            opController.setRumble(XboxController.RumbleType.kRightRumble,
-            Devices.CONTROLLER_RUMBLE);
-        } 
-        else {
+            controller.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
+            controller.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
+            opController.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
+            opController.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
+        } else {
             endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
-            controller.setRumble(XboxController.RumbleType.kLeftRumble,
-            Constants.Absolute_Zero);
-            controller.setRumble(XboxController.RumbleType.kRightRumble,
-            Constants.Absolute_Zero);
-            opController.setRumble(XboxController.RumbleType.kLeftRumble,
-            Constants.Absolute_Zero);
-            opController.setRumble(XboxController.RumbleType.kRightRumble,
-            Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
         }
-        SmartDashboard.putNumber("Current Intake Wrist Position: ",Intake.getInstance().getIntakeWristEncoder());
-        //Error Checking
-        // if(intakeSetpoint == Constants.Intake_Between_Setpoint)
-        //     System.out.println("INTAKE BETWEEN: "+ Intake.getInstance().getRollerCurrent());
-        // else if(intakeSetpoint == Constants.Intake_Ground_Deploy_Setpoint)
-        //     System.out.println("INTAKE GROUND DEPLOY"+ Intake.getInstance().getRollerCurrent());
-        // else if(intakeSetpoint == Constants.Intake_Stow_Setpoint)
-        //     System.out.println("INTAKE STOWED"+ Intake.getInstance().getRollerCurrent());
+
+        SmartDashboard.putNumber("Current Intake Wrist Position: ", intake.getIntakeWristEncoder());
+
         // PID Control
         intake.goToIntakeWristSetpoint(intakeSetpoint);
         endEffector.goToEndEffectorWristSetpoint();
@@ -129,6 +105,7 @@ public class RobotTeleIntakeGround extends Command {
         intake.setIntakeRollerMotorSpeed(Constants.Absolute_Zero);
         intake.setIndexerMotorSpeed(Constants.Absolute_Zero);
         endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
+        intake.goToIntakeWristSetpoint(Constants.Intake_Stow_Setpoint);
 
         controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
         controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);

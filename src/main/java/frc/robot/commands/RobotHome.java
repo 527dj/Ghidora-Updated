@@ -1,5 +1,8 @@
 package frc.robot.commands;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 
@@ -26,6 +29,10 @@ public class RobotHome extends Command {
         endEffector.setEndEffectorWristSetpoint(endEffectorSetpoint);
         elevator.setElevatorSetpoint(elevatorSetpoint);
         System.out.println("RobotHome Online");
+        MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slow;
+        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slow;
+        endEffector.changeMotionMagic(motionMagicConfigs);
     }
 
     @Override
