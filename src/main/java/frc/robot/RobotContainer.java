@@ -103,10 +103,7 @@ public class RobotContainer {
         //====================Align Right====================
         driverController.rightBumper().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
         //====================Ground Intake====================
-        BooleanSupplier hasGamePiece = () -> Intake.getInstance().getRollerCurrent() > Constants.INTAKE_CURRENT_SPIKE;
-        Trigger intakeSpiked = new Trigger(hasGamePiece);
-        DoubleSupplier intakePos =() -> intakeSpiked.debounce(0.01).getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
-        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), intakePos.getAsDouble(), Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID(), operatorController.getHID()));
+        driverController.leftTrigger().whileTrue(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID(), operatorController.getHID()));
         driverController.leftTrigger().onFalse(new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID(),operatorController.getHID()));
         //====================Ground Outtake====================
         driverController.povUp().whileTrue(
@@ -227,4 +224,3 @@ public class RobotContainer {
             return autoChooser.getSelected();
         }
     }
-    

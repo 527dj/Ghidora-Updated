@@ -3,19 +3,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Devices;
 import frc.robot.Constants;
+import com.ctre.phoenix6.Orchestra;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX Elevator_Master_Motor = new TalonFX(Devices.ELEVATOR_MASTER_MOTOR);
     private final TalonFX Elevator_Slave_Motor = new TalonFX(Devices.ELEVATOR_SLAVE_MOTOR);
     private double setpoint;
+    // Orchestra orchestra = new Orchestra();
+
 
     public static Elevator getInstance() {
         return instance;

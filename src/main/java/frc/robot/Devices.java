@@ -27,5 +27,5 @@ public final class Devices {
 
     //====================Climb====================
     public static final int CLIMB_WRIST_MOTOR = 21;
-    public static final int CLIMB_ROLLER_MOTOR = 22;
+    public static final int CLIMB_ROLLER_MOTOR = 5;
 }
