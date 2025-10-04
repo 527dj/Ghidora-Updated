@@ -71,8 +71,9 @@ public class Constants {
 
     //Intake Current Limits
     public static final double Intake_Wrist_Current_Limit = 80.0;
-    public static final double Intake_Roller_Current_Limit = 100.0;
+    public static final double Intake_Roller_Current_Limit = 90.0;
     public static final double INTAKE_CURRENT_SPIKE = 60;
+    public static final double Indexer_Current_Limit = 110;
 
     //Intake Speeds
     public static final double Intake_Ground_Run_Speed = 0.75;
@@ -81,7 +82,7 @@ public class Constants {
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
     public static final double Intake_Stow_Setpoint = -6.7;
-    public static final double Intake_Ground_Deploy_Setpoint = -10;
+    public static final double Intake_Ground_Deploy_Setpoint = -9.5;
     public static final double Intake_Between_Setpoint = -8;
     public static final double IntakeHighStow = -5;
 
@@ -105,7 +106,7 @@ public class Constants {
     public static final double End_Effector_Ground_Intake_Speed = 0.6;
     public static final double End_Effector_Ground_Outake_Speed = -0.4;
     public static final double End_Effector_Coral_Station_Intake_Speed = 0.0;
-    public static final double End_Effector_Score_L1_Coral_Speed = 0.25;
+    public static final double End_Effector_Score_L1_Coral_Speed = -0.25;
     public static final double End_Effector_Score_L2_L3_L4_Speed = 0.5; //0.35
 
     //Algae
@@ -115,8 +116,8 @@ public class Constants {
     //~~~~~End Effector Setpoints~~~~~
     //Coral
     public static final double End_Effector_Wrist_Zero_Setpoint = 0.0;
-    public static final double End_Effector_Wrist_Coral_Ground_Setpoint = 2.56;
-    public static final double End_Effector_Wrist_L1_Score_Setpoint = 5.5;
+    public static final double End_Effector_Wrist_Coral_Ground_Setpoint = 1.50;
+    public static final double End_Effector_Wrist_L1_Score_Setpoint = 30;
     public static final double End_Effector_Wrist_L2_L3_Score_Setpoint = 12.5;
     public static final double End_Effector_Wrist_L4_Score_Setpoint = 15.5; //13.5
     public static final double End_Effector_Wrist_Coral_Station_Setpoint = 0.0;
