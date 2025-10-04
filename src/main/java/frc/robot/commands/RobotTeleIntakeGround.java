@@ -52,7 +52,7 @@ public class RobotTeleIntakeGround extends Command {
 
         BooleanSupplier isIntakeIn = () -> this.intake.getRollerCurrent()>60;
         BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
-        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.05);
+        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.04);
         this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
         addRequirements(this.elevator, this.endEffector, this.intake);
     }
