@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.PlayMusicCommand;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.VisionManager;
@@ -24,6 +26,10 @@ public class Robot extends TimedRobot {
       super.robotInit();
       //Intake.getInstance().zeroIntakeWristWithAbsolute();
       VisionManager.getInstance();
+          new PlayMusicCommand(
+        Climb.getInstance().getClimbWristMotor(),
+        Climb.getInstance().getClimbRollerMotor()
+    ).schedule();
   }
 
   @Override

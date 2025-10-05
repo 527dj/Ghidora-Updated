@@ -65,4 +65,12 @@ public class Climb extends SubsystemBase {
     public double getClimbWristStatorCurrent() {
         return Climb_Wrist_Motor.getStatorCurrent().getValueAsDouble();
     }
+
+    public TalonFX getClimbWristMotor() {
+        return Climb_Wrist_Motor;
+    }
+
+    public TalonFX getClimbRollerMotor() {
+        return Climb_Roller_Motor;
+    }
 }

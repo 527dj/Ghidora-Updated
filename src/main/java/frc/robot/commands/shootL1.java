@@ -1,14 +1,17 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.Elevator;
 import frc.robot.Constants;
 
 public class shootL1 extends Command {
     private final EndEffector endEffector;
-
-    public shootL1(EndEffector endEffector) {
+    private final Elevator elevator;
+    public shootL1(EndEffector endEffector, Elevator elevator) {
         this.endEffector = EndEffector.getInstance(); 
+        this.elevator = Elevator.getInstance();
         addRequirements(endEffector); 
+        addRequirements(elevator);
     }
 
     @Override
@@ -25,6 +28,8 @@ public class shootL1 extends Command {
     public void end(boolean interrupted) {
         endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
         System.out.println("L1 Score Offline");
+        elevator.setElevatorSetpoint(Constants.Absolute_Zero);
+        elevator.goToElevatorSetpoint();
     }
 
     @Override

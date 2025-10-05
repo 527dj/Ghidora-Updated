@@ -65,6 +65,7 @@ public class RobotContainer {
         //====================AUTONOMOUS SETUP====================
         //====================Alignment Commands====================
         NamedCommands.registerCommand("DrivetrainRightAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.RIGHT));
+        NamedCommands.registerCommand("DrivetrainLeftAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.LEFT));
         NamedCommands.registerCommand("DrivetrainMiddleAlign", new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(),ALIGN_STATES.MIDDLE));
         //====================Actions====================
         NamedCommands.registerCommand("RobotAutoPrepScoreL4", new RobotAutoPrepScore(EndEffector.getInstance(), Constants.End_Effector_Wrist_L4_Score_Setpoint, Elevator.getInstance(), Constants.Elevator_L4_Setpoint));
@@ -73,6 +74,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("BottomAlgaeRemoval", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Remove_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Bottom_Algae_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
         NamedCommands.registerCommand("CoralIntake",new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.End_Effector_Ground_Intake_Speed, Constants.End_Effector_Wrist_Coral_Ground_Setpoint, Intake.getInstance(), Constants.Intake_Ground_Deploy_Setpoint, Constants.Intake_Ground_Run_Speed, Elevator.getInstance(), Constants.Elevator_Ground_Coral_Setpoint, driverController.getHID(), operatorController.getHID()));
         NamedCommands.registerCommand("StopCoralIntake",new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID(),operatorController.getHID()));
+        NamedCommands.registerCommand("PrepL1", new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint, Elevator.getInstance()));
+        NamedCommands.registerCommand("ScoreL1", new shootL1(EndEffector.getInstance(), Elevator.getInstance()));
         //====================Zeroing====================
         NamedCommands.registerCommand("RobotHome", new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
         NamedCommands.registerCommand("EndEffectorStop", new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
@@ -218,8 +221,8 @@ public class RobotContainer {
         // operatorController.a().onFalse(new SuperIntake(Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero));
 
         //====================Spit L1=====================
-        operatorController.povDown().whileTrue(new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint));
-        operatorController.povLeft().whileTrue(new shootL1(EndEffector.getInstance()));
+        operatorController.povDown().whileTrue(new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint,Elevator.getInstance()));
+        operatorController.povLeft().whileTrue(new shootL1(EndEffector.getInstance(), Elevator.getInstance()));
 
         //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
         //operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
