@@ -52,7 +52,7 @@ public class RobotTeleIntakeGround extends Command {
 
         BooleanSupplier isIntakeIn = () -> this.intake.getRollerCurrent()>60;
         BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
-        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.04);
+        this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.03);
         this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
         addRequirements(this.elevator, this.endEffector, this.intake);
     }
@@ -76,7 +76,7 @@ public class RobotTeleIntakeGround extends Command {
         intakeSetpoint = inIntake.getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
 
         // Debounced photoelectric logic
-        if (gamePieceDetected.getAsBoolean()) {
+        if (endEffector.getEndEffectorFrontPhotoElectricReading()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
 
             controller.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);

@@ -82,7 +82,7 @@ public class Constants {
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
     public static final double Intake_Stow_Setpoint = -6.7;
-    public static final double Intake_Ground_Deploy_Setpoint = -9.5;
+    public static final double Intake_Ground_Deploy_Setpoint = -9.6;
     public static final double Intake_Between_Setpoint = -8;
     public static final double IntakeHighStow = -5;
 
