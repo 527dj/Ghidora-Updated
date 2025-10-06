@@ -44,6 +44,7 @@ import frc.robot.commands.ClimbRollerRun;
 import frc.robot.commands.ClimbWristRun;
 //Limelight Imports
 import frc.robot.commands.DrivetrainRightAlign;
+import frc.robot.commands.DrivetrainTurnToAngle;
 import frc.robot.commands.DrivetrainReefAutoAlignProfiled;
 
 public class RobotContainer {
@@ -221,7 +222,12 @@ public class RobotContainer {
         // operatorController.a().onFalse(new SuperIntake(Intake.getInstance(), Constants.Intake_Zero_Setpoint, Constants.Absolute_Zero));
 
         //====================Spit L1=====================
-        operatorController.povDown().whileTrue(new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint,Elevator.getInstance()));
+        operatorController.povDown().whileTrue(Commands.parallel(
+            new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint,Elevator.getInstance()),
+            new DrivetrainTurnToAngle(drivetrain, 45)
+            .withPID(0.1, 0.0, 0.01)  // Tune P, I, D gains
+            .withTolerance(1.0, 3.0)  // 1 degree, 3 deg/s tolerance
+            .withTiming(0.3, 5.0)));
         operatorController.povLeft().whileTrue(new shootL1(EndEffector.getInstance(), Elevator.getInstance()));
 
         //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
