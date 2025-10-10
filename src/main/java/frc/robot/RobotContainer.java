@@ -77,6 +77,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("StopCoralIntake",new RobotTeleIntakeGround(EndEffector.getInstance(), Constants.Absolute_Zero, Constants.Absolute_Zero, Intake.getInstance(), Constants.Intake_Stow_Setpoint, Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero, driverController.getHID(),operatorController.getHID()));
         NamedCommands.registerCommand("PrepL1", new ScoreL1(EndEffector.getInstance(), Constants.End_Effector_Wrist_L1_Score_Setpoint, Elevator.getInstance()));
         NamedCommands.registerCommand("ScoreL1", new shootL1(EndEffector.getInstance(), Elevator.getInstance()));
+    
         //====================Zeroing====================
         NamedCommands.registerCommand("RobotHome", new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
         NamedCommands.registerCommand("EndEffectorStop", new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));

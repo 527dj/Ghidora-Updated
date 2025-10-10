@@ -65,12 +65,15 @@ public class RobotIntakeGround extends Command {
         //OLD
         if (endEffector.getEndEffectorFrontPhotoElectricReading() == true) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
-        } else {
-            endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
-        }
+            intake.goToIntakeWristSetpoint(Constants.Intake_Stow_Setpoint);
+            endEffector.setEndEffectorWristSetpoint(Constants.Absolute_Zero);
+            endEffector.goToEndEffectorWristSetpoint();
+            elevator.goToElevatorSetpoint(); 
 
+        }
         //PID Control
-        intake.goToIntakeWristSetpoint(23);
+        intake.goToIntakeWristSetpoint(Constants.Intake_Ground_Deploy_Setpoint);
+        endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();        
 

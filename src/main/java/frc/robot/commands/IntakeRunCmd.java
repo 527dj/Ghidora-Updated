@@ -16,13 +16,13 @@ public class IntakeRunCmd extends Command {
     @Override
     public void initialize() {
         System.out.println("IntakeRun Online");
+        intake.setIntakeRollerMotorSpeed(speed);
+        intake.setIndexerMotorSpeed(speed);
     }
 
     @Override
     public void execute() {
-        double motorSpeed = speed;
-        intake.setIntakeRollerMotorSpeed(motorSpeed);
-        intake.setIndexerMotorSpeed(-motorSpeed);
+
     }
 
     @Override
