@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NPToReef"
+            "pathName": "PToReef"
           }
         },
         {
@@ -124,7 +124,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "NP2ndScore"
+                  "pathName": "P2ndScore"
                 }
               }
             ]

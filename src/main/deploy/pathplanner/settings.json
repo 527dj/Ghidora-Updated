@@ -3,9 +3,10 @@
   "robotLength": 0.8382,
   "holonomicMode": true,
   "pathFolders": [
+    "L1Shite",
     "Middle",
     "NONProcessor",
-    "L1Shite"
+    "Processor"
   ],
   "autoFolders": [],
   "defaultMaxVel": 5.21,
