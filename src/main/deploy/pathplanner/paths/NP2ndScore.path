@@ -32,19 +32,19 @@
     },
     {
       "anchor": {
-        "x": 1.282684426229508,
-        "y": 7.06388319672131
+        "x": 0.9829918032786884,
+        "y": 6.944006147540984
       },
       "prevControl": {
-        "x": 0.7911885245901635,
-        "y": 7.459477459016392
+        "x": 0.49149590163934387,
+        "y": 7.339600409836065
       },
       "nextControl": {
-        "x": 1.7713331154890746,
-        "y": 6.670580593170928
+        "x": 1.471640492538255,
+        "y": 6.550703543990601
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "NPIntakePoint"
     },
     {
       "anchor": {
@@ -57,7 +57,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "NP2E"
     }
   ],
   "rotationTargets": [
