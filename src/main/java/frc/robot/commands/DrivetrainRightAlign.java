@@ -36,9 +36,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      public DrivetrainRightAlign(Drivetrain drivetrain, VisionManager visionManager, ALIGN_STATES targetPosition) {
          this.drivetrain = drivetrain;
          this.visionManager = VisionManager.getInstance();
-        this.targetPosition = targetPosition;
-        FBPIDController.setTolerance(0.05);
-        LRPIDController.setTolerance(0.05);
+         this.targetPosition = targetPosition;
+         FBPIDController.setTolerance(0.05);
+         LRPIDController.setTolerance(0.05);
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
@@ -88,64 +88,73 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         double LR_Reading = visionManager.deriveLRPose();
         double Rot_Reading = visionManager.deriveRotPose();
 
-        if (!FBPositionHasReset && FB_Reading!= 0) {
+        if (!FBPositionHasReset && FB_Reading != 0) {
             FBPIDController.reset(FB_Reading);
             FBPositionHasReset = true;
         } 
 
-        if (!LRPositionHasReset && LR_Reading!= 0) {
+        if (!LRPositionHasReset && LR_Reading != 0) {
             LRPIDController.reset(LR_Reading);
             LRPositionHasReset = true;
         } 
 
-        if (!RotPositionHasReset && Rot_Reading!= 0) {
+        if (!RotPositionHasReset && Rot_Reading != 0) {
             rotationPIDController.reset(Rot_Reading);
             RotPositionHasReset = true;
         } 
 
-         //FB Speed Calculation
+         //FB Speed Calculation - Automatically go to nearest position (front or back)
          double FBSpeed;
-         if (visionManager.deriveFBPose() != 0.0) {
-             FBSpeed = FBPIDController.calculate(visionManager.deriveFBPose(), -0.55);
-         } 
-         else {
+         double zGoal;
+         
+         if (FB_Reading != 0.0) {
+            // Automatically choose closest target: if positive (behind), go forward; if negative (in front), go back
+            if (FB_Reading > 0) {
+                zGoal = 0.1775; // Move forward
+            } else {
+                zGoal = -0.1775; // Move back
+            }
+            FBSpeed = FBPIDController.calculate(FB_Reading, zGoal);
+         } else {
              FBSpeed = 0.0;
          }
  
          //LR Speed Calculation
          double LRSpeed;
-         double goal;
-         if (visionManager.deriveLRPose() != 0.0) {
-            if(this.targetPosition == ALIGN_STATES.LEFT)
+         double goal = 0.0; // Default value
+         
+         if (LR_Reading != 0.0) {
+            if (this.targetPosition == ALIGN_STATES.LEFT) {
                 goal = -0.1775;
-            else if(this.targetPosition == ALIGN_STATES.RIGHT)
+            } else if (this.targetPosition == ALIGN_STATES.RIGHT) {
                 goal = 0.1775;
-            else
-                goal = 0;
-             LRSpeed = -LRPIDController.calculate(visionManager.deriveLRPose(), goal);
+            } else {
+                goal = 0.0;
+            }
+            LRSpeed = -LRPIDController.calculate(LR_Reading, goal);
          } else {
              LRSpeed = 0.0;
          }
  
          // Rot Speed Calculation
          double RotSpeed;
-         if (visionManager.deriveRotPose() != 0.0) {
-             RotSpeed = rotationPIDController.calculate(visionManager.deriveRotPose(), 0.0);
+         if (Rot_Reading != 0.0) {
+             RotSpeed = rotationPIDController.calculate(Rot_Reading, 0.0);
          } else {
              RotSpeed = 0.0;
          }
   
-         LRSpeed = LRPIDController.atGoal() ? 0 : LRSpeed;
+         // Stop movement if at goal
          FBSpeed = FBPIDController.atGoal() ? 0 : FBSpeed;
-
+         LRSpeed = LRPIDController.atGoal() ? 0 : LRSpeed;
 
          SwerveRequest.RobotCentric drivetrainRequest = new SwerveRequest.RobotCentric()
                  .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
                  .withSteerRequestType(SteerRequestType.MotionMagicExpo);
          drivetrain.setControl(drivetrainRequest
-                 .withVelocityX(0.0) //FBSpeed
-                 .withVelocityY(LRSpeed) //LRSpeed
-                 .withRotationalRate(RotSpeed)); //RotSpeed
+                 .withVelocityX(FBSpeed) // FIXED: Now uses FBSpeed instead of 0.0
+                 .withVelocityY(LRSpeed)
+                 .withRotationalRate(RotSpeed));
  
          SmartDashboard.putNumber("FBSpeed", FBSpeed);
          SmartDashboard.putNumber("LRSpeed", LRSpeed);
