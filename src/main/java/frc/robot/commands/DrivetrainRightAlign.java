@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         RIGHT,
         MIDDLE
     };
+
     private ALIGN_STATES targetPosition;
      ProfiledPIDController FBPIDController = new ProfiledPIDController(2.75, 0, 0.01, new Constraints(4.0, 4.0)); //2.75, 0, 0, 4
      ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));
@@ -106,7 +107,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          double FBSpeed;
          if (visionManager.deriveFBPose() != 0.0) {
              FBSpeed = FBPIDController.calculate(visionManager.deriveFBPose(), -0.55);
-         } else {
+         } 
+         else {
              FBSpeed = 0.0;
          }
  
