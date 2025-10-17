@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
     private ALIGN_STATES targetPosition;
      ProfiledPIDController FBPIDController = new ProfiledPIDController(2.75, 0, 0.01, new Constraints(4.0, 4.0)); //2.75, 0, 0, 4
-     ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));
+     ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));//6, 0, 0, 4, 4
      ProfiledPIDController rotationPIDController = new ProfiledPIDController(0.1, 0, 0, new Constraints(1.0, 1.0));   
      
      boolean FBPositionHasReset = false;
@@ -37,31 +37,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          this.drivetrain = drivetrain;
          this.visionManager = VisionManager.getInstance();
          this.targetPosition = targetPosition;
-         FBPIDController.setTolerance(0.05);
-         LRPIDController.setTolerance(0.05);
+         FBPIDController.setTolerance(0.02);
+         LRPIDController.setTolerance(0.02);
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
-        //  //HotRefreshFBAlignPID
-        //  SmartDashboard.putNumber("FBAlign kP", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kI", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kD", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("FBAlign kAccel", 0.0);
+         //HotRefreshFBAlignPID
+         SmartDashboard.putNumber("FBAlign kP", 0.0);
+         SmartDashboard.putNumber("FBAlign kI", 0.0);
+         SmartDashboard.putNumber("FBAlign kD", 0.0);
+         SmartDashboard.putNumber("FBAlign kVelo", 0.0);
+         SmartDashboard.putNumber("FBAlign kAccel", 0.0);
  
-        //  //HotRefreshLRAlignPID
-        //  SmartDashboard.putNumber("LRAlign kP", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kI", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kD", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("LRAlign kAccel", 0.0);
+         //HotRefreshLRAlignPID
+         SmartDashboard.putNumber("LRAlign kP", 0.0);
+         SmartDashboard.putNumber("LRAlign kI", 0.0);
+         SmartDashboard.putNumber("LRAlign kD", 0.0);
+         SmartDashboard.putNumber("LRAlign kVelo", 0.0);
+         SmartDashboard.putNumber("LRAlign kAccel", 0.0);
  
-        //  //HotRefreshRotAlignPID
-        //  SmartDashboard.putNumber("RotAlign kP", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kI", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kD", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kVelo", 0.0);
-        //  SmartDashboard.putNumber("RotAlign kAccel", 0.0);
+         //HotRefreshRotAlignPID
+         SmartDashboard.putNumber("RotAlign kP", 0.0);
+         SmartDashboard.putNumber("RotAlign kI", 0.0);
+         SmartDashboard.putNumber("RotAlign kD", 0.0);
+         SmartDashboard.putNumber("RotAlign kVelo", 0.0);
+         SmartDashboard.putNumber("RotAlign kAccel", 0.0);
      }    
  
      @Override
@@ -103,19 +103,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             RotPositionHasReset = true;
         } 
 
-         //FB Speed Calculation - Automatically go to nearest position (front or back)
+         //FB Speed Calculation
          double FBSpeed;
          double zGoal;
          
          if (FB_Reading != 0.0) {
-            // Automatically choose closest target: if positive (behind), go forward; if negative (in front), go back
             if (FB_Reading > 0) {
-                zGoal = 0.1775; // Move forward
-            } else {
-                zGoal = -0.1775; // Move back
+                zGoal = 0.1775; //Move forward 0.1775
+            } 
+            else {
+                zGoal = -0.1775;//zGoal = -0.1775; //Move back
             }
             FBSpeed = FBPIDController.calculate(FB_Reading, zGoal);
-         } else {
+         } 
+         else {
              FBSpeed = 0.0;
          }
  
@@ -124,8 +125,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          double goal = 0.0; // Default value
          
          if (LR_Reading != 0.0) {
-            if (this.targetPosition == ALIGN_STATES.LEFT) {
-                goal = -0.1775;
+            if (this.targetPosition == ALIGN_STATES.LEFT) 
+            {
+                goal = -0.1875;//-0.1775
             } else if (this.targetPosition == ALIGN_STATES.RIGHT) {
                 goal = 0.1775;
             } else {

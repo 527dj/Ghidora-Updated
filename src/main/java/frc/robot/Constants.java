@@ -82,7 +82,7 @@ public class Constants {
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
     public static final double Intake_Stow_Setpoint = -6.7;
-    public static final double Intake_Ground_Deploy_Setpoint = -9.9;
+    public static final double Intake_Ground_Deploy_Setpoint = -10.2;
     public static final double Intake_Between_Setpoint = -8;
     public static final double IntakeHighStow = -5;
 
@@ -107,7 +107,7 @@ public class Constants {
     public static final double End_Effector_Ground_Outake_Speed = -0.4;
     public static final double End_Effector_Coral_Station_Intake_Speed = 0.0;
     public static final double End_Effector_Score_L1_Coral_Speed = -0.25;
-    public static final double End_Effector_Score_L2_L3_L4_Speed = 0.5; //0.35
+    public static final double End_Effector_Score_L2_L3_L4_Speed = 0.7; //0.35
 
     //Algae
     public static final double End_Effector_Algae_Intake_Speed = 1.0;
@@ -124,7 +124,7 @@ public class Constants {
 
     //Algae  
     public static final double End_Effector_Wrist_Algae_Remove_Setpoint = 36.0;
-    public static final double End_Effector_Wrist_Algae_Ground_Setpoint = 37.0;
+    public static final double End_Effector_Wrist_Algae_Ground_Setpoint = 40.0;
     public static final double End_Effector_Wrist_Algae_Stow_Setpoint = 15.5; //4.0
     public static final double End_Effector_Wrist_Processor_Score_Setpoint = 31.0;
     public static final double End_Effector_Wrist_Net_Score_Setpoint = 21.0;
