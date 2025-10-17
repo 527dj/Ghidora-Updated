@@ -272,6 +272,34 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    /**
+     * Add a vision measurement to the pose estimator.
+     * 
+     * @param visionPose The pose estimated by vision
+     * @param timestampSeconds The timestamp of the vision measurement in seconds
+     * @param visionMeasurementStdDevs Standard deviations of the vision measurement [x, y, theta]
+     */
+    public void addVisionMeasurement(
+            edu.wpi.first.math.geometry.Pose2d visionPose,
+            double timestampSeconds,
+            edu.wpi.first.math.VecBuilder visionMeasurementStdDevs) {
+        // The TunerSwerveDrivetrain parent class has a built-in pose estimator
+        addVisionMeasurement(visionPose, timestampSeconds);
+    }
+
+    /**
+     * Add a vision measurement to the pose estimator with custom standard deviations.
+     * 
+     * @param visionPose The pose estimated by vision
+     * @param timestampSeconds The timestamp of the vision measurement in seconds
+     */
+    public void addVisionMeasurement(
+            edu.wpi.first.math.geometry.Pose2d visionPose,
+            double timestampSeconds) {
+        // Call the parent class method
+        super.addVisionMeasurement(visionPose, timestampSeconds);
+    }
+
     @Override
     public void periodic() {
         /*
@@ -281,9 +309,7 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
-
-         //m_field.setRobotPose(getState().Pose);
-
+    
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
@@ -294,6 +320,13 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+    
+        // Update Limelight with robot orientation for MegaTag2
+        LimelightHelpers.SetRobotOrientation(
+            "limelight-dihlite",
+            getState().Pose.getRotation().getDegrees(),
+            0, 0, 0, 0, 0
+        );
     }
 
     private void startSimThread() {

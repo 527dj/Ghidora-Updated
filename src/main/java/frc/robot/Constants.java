@@ -124,7 +124,7 @@ public class Constants {
 
     //Algae  
     public static final double End_Effector_Wrist_Algae_Remove_Setpoint = 36.0;
-    public static final double End_Effector_Wrist_Algae_Ground_Setpoint = 40.0;
+    public static final double End_Effector_Wrist_Algae_Ground_Setpoint = 38.0;
     public static final double End_Effector_Wrist_Algae_Stow_Setpoint = 15.5; //4.0
     public static final double End_Effector_Wrist_Processor_Score_Setpoint = 31.0;
     public static final double End_Effector_Wrist_Net_Score_Setpoint = 21.0;
