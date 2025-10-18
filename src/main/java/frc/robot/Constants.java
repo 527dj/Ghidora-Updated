@@ -106,7 +106,7 @@ public class Constants {
     public static final double End_Effector_Ground_Intake_Speed = 0.6;
     public static final double End_Effector_Ground_Outake_Speed = -0.4;
     public static final double End_Effector_Coral_Station_Intake_Speed = 0.0;
-    public static final double End_Effector_Score_L1_Coral_Speed = -0.4;
+    public static final double End_Effector_Score_L1_Coral_Speed = -0.27;
     public static final double End_Effector_Score_L2_L3_L4_Speed = 0.7; //0.35
 
     //Algae
@@ -149,7 +149,7 @@ public class Constants {
     public static final double Elevator_Zero_Setpoint = 0.0;
     public static final double Elevator_Ground_Coral_Setpoint = 0.0;
     public static final double Elevator_Coral_Station_Setpoint = 6.5;
-    public static final double Elevator_L1_Setpoint = 2.2;
+    public static final double Elevator_L1_Setpoint = 1.6;
     public static final double Elevator_L2_Setpoint = 4;
     public static final double Elevator_L3_Setpoint = 11.1;
     public static final double Elevator_L4_Setpoint = 24.14;
