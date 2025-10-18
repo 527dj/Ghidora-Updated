@@ -28,10 +28,6 @@ public class shootL1 extends Command {
     public void end(boolean interrupted) {
         endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
         System.out.println("L1 Score Offline");
-        elevator.setElevatorSetpoint(Constants.Absolute_Zero);
-        elevator.goToElevatorSetpoint();
-        endEffector.setEndEffectorWristSetpoint(Constants.Absolute_Zero);
-        endEffector.goToEndEffectorWristSetpoint();
     }
 
     @Override
