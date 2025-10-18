@@ -43,8 +43,16 @@ public class RobotAlgaeIntake extends Command {
         elevator.setElevatorSetpoint(elevatorSetpoint);
         System.out.println("RobotAlgaeIntake Online");
         MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slow;
-        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slow;
+        if(endEffectorSetpoint==Constants.End_Effector_Wrist_Algae_Ground_Setpoint){
+            motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slower;
+            motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slower;
+            System.out.println("Using Slower MM for Algae Ground Intake");
+        }
+        else{
+            motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slow;
+            motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slow;
+            System.out.println("Using Slow MM for Algae Intake");
+        }
         endEffector.changeMotionMagic(motionMagicConfigs);
     }
 
