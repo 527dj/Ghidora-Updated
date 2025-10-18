@@ -68,9 +68,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
      public void initialize() {
          System.out.println("DrivetrainPoseAlign Online");
  
-        //  HotRefreshFBAlignPID();
-        //  HotRefreshLRAlignPID();
-        //  HotRefreshRotAlignPID();
+         HotRefreshFBAlignPID();
+         HotRefreshLRAlignPID();
+         HotRefreshRotAlignPID();
 
         FBPositionHasReset = false;
         LRPositionHasReset = false;
