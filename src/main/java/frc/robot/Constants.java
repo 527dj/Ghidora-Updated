@@ -147,8 +147,8 @@ public class Constants {
     //~~~~~Elevator Setpoints~~~~~
     //Coral
     public static final double Elevator_Zero_Setpoint = 0.0;
-    public static final double Elevator_Ground_Coral_Setpoint = 0.0;
-    public static final double Elevator_Coral_Station_Setpoint = 6;
+    public static final double Elevator_Ground_Coral_Setpoint = 0.5;
+    public static final double Elevator_Coral_Station_Setpoint = 5.6;
     public static final double Elevator_L1_Setpoint = 1.3;
     public static final double Elevator_L2_Setpoint = 4;
     public static final double Elevator_L3_Setpoint = 11.1;
