@@ -53,18 +53,6 @@ public class RobotPrepScore extends Command {
     @Override
     public void end(boolean interrupted) {
         System.out.println("RobotPrepScore Offline");
-        MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity_Slow;
-        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration_Slow;
-        endEffector.changeMotionMagic(motionMagicConfigs);
-        endEffector.setEndEffectorWristSetpoint(Constants.Absolute_Zero);
-        elevator.setElevatorSetpoint(Constants.Absolute_Zero);
-        endEffector.goToEndEffectorWristSetpoint();
-        elevator.goToElevatorSetpoint();
-        MotionMagicConfigs motionMagicConfigs2 = new MotionMagicConfigs();
-        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity;
-        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration;
-        endEffector.changeMotionMagic(motionMagicConfigs2);
     }
 
     @Override
