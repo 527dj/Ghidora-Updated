@@ -154,7 +154,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                  .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
                  .withSteerRequestType(SteerRequestType.MotionMagicExpo);
          drivetrain.setControl(drivetrainRequest
-                 .withVelocityX(FBSpeed) // FIXED: Now uses FBSpeed instead of 0.0
+                 .withVelocityX(FBSpeed)
                  .withVelocityY(LRSpeed)
                  .withRotationalRate(RotSpeed));
  
