@@ -81,7 +81,7 @@ public class Constants {
 
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
-    public static final double Intake_Stow_Setpoint = -6;
+    public static final double Intake_Stow_Setpoint = -5.5;
     public static final double Intake_Ground_Deploy_Setpoint = -10.2;
     public static final double Intake_Between_Setpoint = -8;
     public static final double IntakeHighStow = -5;
@@ -151,7 +151,7 @@ public class Constants {
     public static final double Elevator_Zero_Setpoint = 0.0;
     public static final double Elevator_Ground_Coral_Setpoint = 0.5;
     public static final double Elevator_Coral_Station_Setpoint = 5;
-    public static final double Elevator_L1_Setpoint = 1.3;
+    public static final double Elevator_L1_Setpoint = 1;
     public static final double Elevator_L2_Setpoint = 4;
     public static final double Elevator_L3_Setpoint = 11.1;
     public static final double Elevator_L4_Setpoint = 24.14;

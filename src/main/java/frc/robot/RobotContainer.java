@@ -228,8 +228,7 @@ public class RobotContainer {
             .withTiming(0.3, 5.0)));
         operatorController.povLeft().whileTrue(new shootL1(EndEffector.getInstance(), Elevator.getInstance()));
 
-        //MOVE INTAKE TO HIGHER SETPOINT (OPERATOR)
-        //operatorController.povDown().whileTrue(new IntakeWristSetpoint(Intake.getInstance(), Constants.IntakeHighStow));
+
     }
 
         public Command getAutonomousCommand() {
