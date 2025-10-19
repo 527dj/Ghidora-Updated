@@ -128,9 +128,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             if (this.targetPosition == ALIGN_STATES.LEFT) 
             {
                 goal = -0.1875;//-0.1775
-            } else if (this.targetPosition == ALIGN_STATES.RIGHT) {
+            } 
+            else if (this.targetPosition == ALIGN_STATES.RIGHT) {
                 goal = 0.18;//0.1775
-            } else {
+            } 
+            else {
                 goal = 0.0;
             }
             LRSpeed = -LRPIDController.calculate(LR_Reading, goal);
