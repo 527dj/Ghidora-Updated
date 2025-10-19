@@ -91,8 +91,8 @@ public class Constants {
     public static final double End_Effector_Wrist_kP = 2.0;
     public static final double End_Effector_Wrist_kI = 0.0;
     public static final double End_Effector_Wrist_kD = 0.03;
-    public static final double End_Effector_Wrist_Velocity = 200.0; //150
-    public static final double End_Effector_Wrist_Acceleration   = 400.0; //300
+    public static final double End_Effector_Wrist_Velocity = 175.0;
+    public static final double End_Effector_Wrist_Acceleration   = 375.0;
     public static final double End_Effector_Wrist_Velocity_Slow = 150;
     public static final double End_Effector_Wrist_Acceleration_Slow = 300;
     public static final double End_Effector_Wrist_Velocity_Slower = 100;
@@ -121,7 +121,7 @@ public class Constants {
     public static final double End_Effector_Wrist_Coral_Ground_Setpoint = 1.50;
     public static final double End_Effector_Wrist_L1_Score_Setpoint = 30;
     public static final double End_Effector_Wrist_L2_L3_Score_Setpoint = 12.5;
-    public static final double End_Effector_Wrist_L4_Score_Setpoint = 15.5; //16
+    public static final double End_Effector_Wrist_L4_Score_Setpoint = 16; //15.5 - with 3d printed deflectors
     public static final double End_Effector_Wrist_Coral_Station_Setpoint = 0.0;
 
     //Algae  
