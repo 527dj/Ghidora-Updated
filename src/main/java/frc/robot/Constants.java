@@ -151,7 +151,7 @@ public class Constants {
     public static final double Elevator_Zero_Setpoint = 0.0;
     public static final double Elevator_Ground_Coral_Setpoint = 0.5;
     public static final double Elevator_Coral_Station_Setpoint = 5;
-    public static final double Elevator_L1_Setpoint = 1;
+    public static final double Elevator_L1_Setpoint = 0.7;
     public static final double Elevator_L2_Setpoint = 4;
     public static final double Elevator_L3_Setpoint = 11.1;
     public static final double Elevator_L4_Setpoint = 24.14;
