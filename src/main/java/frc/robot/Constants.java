@@ -113,7 +113,7 @@ public class Constants {
 
     //Algae
     public static final double End_Effector_Algae_Intake_Speed = 1.0;
-    public static final double End_Effector_Algae_Score_Speed = -1.0;
+    public static final double End_Effector_Algae_Score_Speed = -0.85;
 
     //~~~~~End Effector Setpoints~~~~~
     //Coral
