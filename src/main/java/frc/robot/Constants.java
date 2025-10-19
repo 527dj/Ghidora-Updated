@@ -91,8 +91,8 @@ public class Constants {
     public static final double End_Effector_Wrist_kP = 2.0;
     public static final double End_Effector_Wrist_kI = 0.0;
     public static final double End_Effector_Wrist_kD = 0.03;
-    public static final double End_Effector_Wrist_Velocity = 300.0; //150
-    public static final double End_Effector_Wrist_Acceleration   = 600.0; //300
+    public static final double End_Effector_Wrist_Velocity = 200.0; //150
+    public static final double End_Effector_Wrist_Acceleration   = 400.0; //300
     public static final double End_Effector_Wrist_Velocity_Slow = 150;
     public static final double End_Effector_Wrist_Acceleration_Slow = 300;
     public static final double End_Effector_Wrist_Velocity_Slower = 100;
