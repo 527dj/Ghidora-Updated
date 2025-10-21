@@ -82,7 +82,7 @@ public class Constants {
     //Intake Setpoints
     public static final double Intake_Zero_Setpoint = 0.0;
     public static final double Intake_Stow_Setpoint = -5.5;
-    public static final double Intake_Ground_Deploy_Setpoint = -10.8;
+    public static double Intake_Ground_Deploy_Setpoint = -10.8; //HOT CHANGE ENABLED
     public static final double Intake_Between_Setpoint = -8;
     public static final double IntakeHighStow = -5;
 
@@ -91,8 +91,8 @@ public class Constants {
     public static final double End_Effector_Wrist_kP = 2.0;
     public static final double End_Effector_Wrist_kI = 0.0;
     public static final double End_Effector_Wrist_kD = 0.03;
-    public static final double End_Effector_Wrist_Velocity = 175.0;
-    public static final double End_Effector_Wrist_Acceleration   = 375.0;
+    public static double End_Effector_Wrist_Velocity = 175.0; //HOT CHANGE ENABLED
+    public static double End_Effector_Wrist_Acceleration   = 375.0; //HOT CHANGE ENABLED
     public static final double End_Effector_Wrist_Velocity_Slow = 150;
     public static final double End_Effector_Wrist_Acceleration_Slow = 300;
     public static final double End_Effector_Wrist_Velocity_Slower = 100;
@@ -120,8 +120,8 @@ public class Constants {
     public static final double End_Effector_Wrist_Zero_Setpoint = 0.0;
     public static final double End_Effector_Wrist_Coral_Ground_Setpoint = 1.50;
     public static final double End_Effector_Wrist_L1_Score_Setpoint = 30;
-    public static final double End_Effector_Wrist_L2_L3_Score_Setpoint = 12.5;
-    public static final double End_Effector_Wrist_L4_Score_Setpoint = 16; //15.5 - with 3d printed deflectors
+    public static double End_Effector_Wrist_L2_L3_Score_Setpoint = 12.5; //HOT CHANGE ENABLED
+    public static double End_Effector_Wrist_L4_Score_Setpoint = 16; //15.5 - with 3d printed deflectors HOT CHANGE ENABLED
     public static final double End_Effector_Wrist_Coral_Station_Setpoint = 0.0;
 
     //Algae  
@@ -151,10 +151,10 @@ public class Constants {
     public static final double Elevator_Zero_Setpoint = 0.0;
     public static final double Elevator_Ground_Coral_Setpoint = 0.5;
     public static final double Elevator_Coral_Station_Setpoint = 5;
-    public static final double Elevator_L1_Setpoint = 0.7;
-    public static final double Elevator_L2_Setpoint = 4;
-    public static final double Elevator_L3_Setpoint = 11.1;
-    public static final double Elevator_L4_Setpoint = 24.14;
+    public static double Elevator_L1_Setpoint = 0.7; //HOT CHANGE ENABLED
+    public static double Elevator_L2_Setpoint = 4; //HOT CHANGE ENABLED
+    public static double Elevator_L3_Setpoint = 11.1; //HOT CHANGE ENABLED
+    public static double Elevator_L4_Setpoint = 24.14; //HOT CHANGE ENABLED
 
     //Algae
     public static final double Elevator_Bottom_Algae_Setpoint = 13.0;

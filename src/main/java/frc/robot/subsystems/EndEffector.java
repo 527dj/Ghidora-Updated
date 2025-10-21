@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.ctre.phoenix6.Orchestra;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.networktables.GenericEntry;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -14,77 +14,80 @@ import frc.robot.Devices;
 import frc.robot.Constants;
 
 public class EndEffector extends SubsystemBase {
+
+    //Motors
     private final TalonFX End_Effector_Wrist_Motor = new TalonFX(Devices.END_EFFECTOR_WRIST_MOTOR);
     private final TalonFX End_Effector_Top_Roller_Motor = new TalonFX(Devices.END_EFFECTOR_ROLLER_MOTOR);
     private final DigitalInput End_Effector_Front_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_FRONT_PORT);
     private final DigitalInput End_Effector_Back_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_BACK_PORT);
 
+    //Shuffleboard entries
+    private final GenericEntry wristVel =
+        Shuffleboard.getTab("EndEffector").add("Wrist Velocity", Constants.End_Effector_Wrist_Velocity).getEntry();
+    private final GenericEntry wristAccel =
+        Shuffleboard.getTab("EndEffector").add("Wrist Acceleration", Constants.End_Effector_Wrist_Acceleration).getEntry();
+    private final GenericEntry l23Setpoint =
+        Shuffleboard.getTab("EndEffector").add("L2 L3 Setpoint", Constants.End_Effector_Wrist_L2_L3_Score_Setpoint).getEntry();
+    private final GenericEntry l4Setpoint =
+        Shuffleboard.getTab("EndEffector").add("L4 Setpoint", Constants.End_Effector_Wrist_L4_Score_Setpoint).getEntry();
+
+    //Constant copies for periodic updates
+    private double wristVelocity = Constants.End_Effector_Wrist_Velocity;
+    private double wristAcceleration = Constants.End_Effector_Wrist_Acceleration;
+    private double l23WristSetpoint = Constants.End_Effector_Wrist_L2_L3_Score_Setpoint;
+    private double l4WristSetpoint = Constants.End_Effector_Wrist_L4_Score_Setpoint;
+
     private double setpoint;
 
-    public static EndEffector getInstance() {
-        return instance;
-    }
-
-    private static EndEffector instance = new EndEffector();
+    private static final EndEffector instance = new EndEffector();
+    public static EndEffector getInstance() { return instance; }
 
     public EndEffector() {
         System.out.println("====================EndEffector Subsystem Online====================");
-        //HotRefreshEndEffectorConfig
-        // SmartDashboard.putNumber("End Effector kG", 0.0);
-        // SmartDashboard.putNumber("End Effector kP", 0.0);
-        // SmartDashboard.putNumber("End Effector kI", 0.0);
-        // SmartDashboard.putNumber("End Effector kD", 0.0);
-        // SmartDashboard.putNumber("End Effector kVelo", 0.0);
-        // SmartDashboard.putNumber("End Effector kAccel", 0.0);
 
-        //====================End Effector Wrist====================
         var endEffectorWristMotorConfigs = new TalonFXConfiguration();
-
         End_Effector_Wrist_Motor.setPosition(Constants.Absolute_Zero);
 
-        //Brake Mode
+        // Brake Mode
         endEffectorWristMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        //General Configurations
+        // PID and Motion Magic Config
         var generalSlotConfigs = endEffectorWristMotorConfigs.Slot0;
         generalSlotConfigs.kP = Constants.End_Effector_Wrist_kP;
         generalSlotConfigs.kI = Constants.End_Effector_Wrist_kI;
         generalSlotConfigs.kD = Constants.End_Effector_Wrist_kD;
 
-        //Motion Magic
         var motionMagicConfigs = endEffectorWristMotorConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = Constants.End_Effector_Wrist_Velocity;
-        motionMagicConfigs.MotionMagicAcceleration = Constants.End_Effector_Wrist_Acceleration;
+        motionMagicConfigs.MotionMagicCruiseVelocity = wristVelocity;
+        motionMagicConfigs.MotionMagicAcceleration = wristAcceleration;
 
-        //Current Limits
+        // Current Limits
         var endEffectorWristLimitConfigs = endEffectorWristMotorConfigs.CurrentLimits;
         endEffectorWristLimitConfigs.StatorCurrentLimit = Constants.End_Effector_Wrist_Current_Limit;
         endEffectorWristLimitConfigs.StatorCurrentLimitEnable = true;
 
-        //Applies Configs
         End_Effector_Wrist_Motor.getConfigurator().apply(endEffectorWristMotorConfigs);
 
-        //====================End Effector Rollers====================
-        var endEffectorRollerMotorsConfigs = new TalonFXConfiguration();
-
-        //Current Limits
-        var endEffectorRollerLimitConfigs = endEffectorRollerMotorsConfigs.CurrentLimits;
-        endEffectorRollerLimitConfigs.StatorCurrentLimit = Constants.End_Effector_Roller_Current_Limit;
-        endEffectorRollerLimitConfigs.StatorCurrentLimitEnable = true; 
-
-        //Applies Configs
-        End_Effector_Top_Roller_Motor.getConfigurator().apply(endEffectorRollerLimitConfigs);
+        // Roller motor setup
+        var rollerConfigs = new TalonFXConfiguration();
+        rollerConfigs.CurrentLimits.StatorCurrentLimit = Constants.End_Effector_Roller_Current_Limit;
+        rollerConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+        End_Effector_Top_Roller_Motor.getConfigurator().apply(rollerConfigs);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("End Effector Wrist Encoder", getEndEffectorWristEncoder());
         SmartDashboard.putNumber("End Effector Wrist Velocity", getEndEffectorWristVelocity());
-
         SmartDashboard.putBoolean("End Effector Front Photoelectric Reading", getEndEffectorFrontPhotoElectricReading());
         SmartDashboard.putBoolean("End Effector Back Photoelectric Reading", getEndEffectorBackPhotoElectricReading());
+
+        wristVelocity = wristVel.getDouble(wristVelocity);
+        wristAcceleration = wristAccel.getDouble(wristAcceleration);
+        l23WristSetpoint = l23Setpoint.getDouble(l23WristSetpoint);
+        l4WristSetpoint = l4Setpoint.getDouble(l4WristSetpoint);
     }
-    
+
     //====================End Effector Wrist Methods====================
     public double getEndEffectorWristEncoder() {
         return End_Effector_Wrist_Motor.getPosition().getValueAsDouble();
@@ -94,13 +97,8 @@ public class EndEffector extends SubsystemBase {
         return End_Effector_Wrist_Motor.getVelocity().getValueAsDouble();
     }
 
-
     public void setEndEffectorWristSetpoint(double setpoint) {
         this.setpoint = setpoint;
-    }
-
-    public void changeMotionMagic(MotionMagicConfigs configs) {
-        End_Effector_Wrist_Motor.getConfigurator().apply(configs);
     }
 
     public void goToEndEffectorWristSetpoint() {
@@ -116,8 +114,20 @@ public class EndEffector extends SubsystemBase {
         End_Effector_Wrist_Motor.setPosition(Constants.Absolute_Zero);
     }
 
+    public void changeMotionMagic(MotionMagicConfigs configs) {
+         End_Effector_Wrist_Motor.getConfigurator().apply(configs); 
+    }
+
+    public void applyMotionMagicFromShuffleboard() {
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicCruiseVelocity = wristVelocity;
+        configs.MotionMagicAcceleration = wristAcceleration;
+        End_Effector_Wrist_Motor.getConfigurator().apply(configs);
+        System.out.println("[EndEffector] MotionMagic updated from Shuffleboard.");
+    }
+
     //====================End Effector Roller Methods====================
-    public void setEndEffectorRollerMotorSpeed(double speed) {    
+    public void setEndEffectorRollerMotorSpeed(double speed) {
         End_Effector_Top_Roller_Motor.set(speed);
     }
 
@@ -129,23 +139,11 @@ public class EndEffector extends SubsystemBase {
         return !End_Effector_Back_Photoelectric.get();
     }
 
-    // public void HotRefreshEndEffectorConfig() {
-    //     //General Configurations
-    //     var generalSlotConfigs = new Slot0Configs();
-    //     generalSlotConfigs.kG = SmartDashboard.getNumber("End Effector kG", 0.0);
-    //     generalSlotConfigs.kP = SmartDashboard.getNumber("End Effector kP", 0.0);
-    //     generalSlotConfigs.kI = SmartDashboard.getNumber("End Effector kI", 0.0);
-    //     generalSlotConfigs.kD = SmartDashboard.getNumber("End Effector kD", 0.0);
-
-    //     //Motion Magic
-    //     var motionMagicConfigs = new MotionMagicConfigs();
-    //     motionMagicConfigs.MotionMagicCruiseVelocity = SmartDashboard.getNumber("End Effector kVelo", 0.0);
-    //     motionMagicConfigs.MotionMagicAcceleration = SmartDashboard.getNumber("End Effector kAccel", 0.0);
-
-    //     //Applies Configs
-    //     End_Effector_Wrist_Motor.getConfigurator().apply(generalSlotConfigs);
-    //     End_Effector_Wrist_Motor.getConfigurator().apply(motionMagicConfigs);
-
-    //     System.out.println("HotRefreshEndEffectorConfig Complete");
-    //}
+    public void printTunedValues() {
+        System.out.println("===== Tuned End Effector Values =====");
+        System.out.println("Velocity: " + wristVelocity);
+        System.out.println("Acceleration: " + wristAcceleration);
+        System.out.println("L2/L3 Setpoint: " + l23WristSetpoint);
+        System.out.println("L4 Setpoint: " + l4WristSetpoint);
+    }
 }

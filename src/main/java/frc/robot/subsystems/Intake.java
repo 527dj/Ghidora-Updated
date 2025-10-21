@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.GenericEntry;
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -20,6 +22,7 @@ public class Intake extends SubsystemBase {
     private final TalonFX Intake_Roller_Motor = new TalonFX(Devices.INTAKE_ROLLER_MOTOR);
     private final TalonFX Intake_Indexer_Master_Motor = new TalonFX(Devices.INDEXER_MOTOR);
     private final AbsoluteEncoder encoder = new AbsoluteEncoder(Devices.INTAKE_WRIST_THROUGH_BORE_PORT);
+    private final GenericEntry IntakeGroundDeploy = Shuffleboard.getTab("Intake").add("Ground Deploy", Constants.Intake_Ground_Deploy_Setpoint).getEntry();
 
     private double setpoint;
     
