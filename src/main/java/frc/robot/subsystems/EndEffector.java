@@ -82,10 +82,10 @@ public class EndEffector extends SubsystemBase {
         SmartDashboard.putBoolean("End Effector Front Photoelectric Reading", getEndEffectorFrontPhotoElectricReading());
         SmartDashboard.putBoolean("End Effector Back Photoelectric Reading", getEndEffectorBackPhotoElectricReading());
 
-        wristVelocity = wristVel.getDouble(wristVelocity);
-        wristAcceleration = wristAccel.getDouble(wristAcceleration);
-        l23WristSetpoint = l23Setpoint.getDouble(l23WristSetpoint);
-        l4WristSetpoint = l4Setpoint.getDouble(l4WristSetpoint);
+        Constants.End_Effector_Wrist_Velocity = wristVel.getDouble(wristVelocity);
+        Constants.End_Effector_Wrist_Acceleration = wristAccel.getDouble(wristAcceleration);
+        Constants.End_Effector_Wrist_L2_L3_Score_Setpoint = l23Setpoint.getDouble(l23WristSetpoint);
+        Constants.End_Effector_Wrist_L4_Score_Setpoint = l4Setpoint.getDouble(l4WristSetpoint);
     }
 
     //====================End Effector Wrist Methods====================
