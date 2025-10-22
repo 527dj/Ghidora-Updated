@@ -40,11 +40,11 @@ public class HotChangeManager {
     //Variables
     private double EEWristVel=Constants.End_Effector_Wrist_Velocity;
     private double EEWristAccel = Constants.End_Effector_Wrist_Acceleration;
-    private double EEL1L2ScoreSetpoint = Constants.End_Effector_Wrist_L2_L3_Score_Setpoint;
+    private double EEL2L3ScoreSetpoint = Constants.End_Effector_Wrist_L2_L3_Score_Setpoint;
     private double EEL4ScoreSetpoint = Constants.End_Effector_Wrist_L4_Score_Setpoint;
 
     private HotChangeManager() {
-        // ==================== 🔥 Intake Hot Changes ====================
+        // ====================Intake Hot Changes====================
         intakeHotTab = Shuffleboard.getTab("Intake Hot");
         
         intakeGroundDeployEntry = intakeHotTab
@@ -53,7 +53,7 @@ public class HotChangeManager {
             .withSize(3, 2)
             .getEntry();
         
-        // ==================== 🔥 EndEffector Hot Changes ====================
+        // ====================EndEffector Hot Changes====================
         endEffectorHotTab = Shuffleboard.getTab("EndEffector Hot");
         
         // Motion Magic Parameters (Top Row)
@@ -71,7 +71,7 @@ public class HotChangeManager {
         
         // Scoring Setpoints (Bottom Row)
         endEffectorL2L3SetpointEntry = endEffectorHotTab
-            .add("L2/L3 Score Setpoint", EEL1L2ScoreSetpoint)
+            .add("L2/L3 Score Setpoint", EEL2L3ScoreSetpoint)
             .withPosition(0, 1)
             .withSize(2, 1)
             .getEntry();
@@ -82,7 +82,7 @@ public class HotChangeManager {
             .withSize(2, 1)
             .getEntry();
         
-        // ==================== 🔥 Elevator Hot Changes ====================
+        // ====================Elevator Hot Changes====================
         elevatorHotTab = Shuffleboard.getTab("Elevator Hot");
         
         // Level Setpoints in 2x2 Grid
@@ -132,13 +132,13 @@ public class HotChangeManager {
         
         // EndEffector
         Constants.End_Effector_Wrist_Velocity = 
-            endEffectorWristVelocityEntry.getDouble(EEWristVel);
+            endEffectorWristVelocityEntry.getDouble(Constants.End_Effector_Wrist_Velocity);
         Constants.End_Effector_Wrist_Acceleration = 
-            endEffectorWristAccelerationEntry.getDouble(EEWristAccel);
+            endEffectorWristAccelerationEntry.getDouble(Constants.End_Effector_Wrist_Acceleration);
         Constants.End_Effector_Wrist_L2_L3_Score_Setpoint = 
-            endEffectorL2L3SetpointEntry.getDouble(EEL1L2ScoreSetpoint);
+            endEffectorL2L3SetpointEntry.getDouble(Constants.End_Effector_Wrist_L2_L3_Score_Setpoint);
         Constants.End_Effector_Wrist_L4_Score_Setpoint = 
-            endEffectorL4SetpointEntry.getDouble(EEL4ScoreSetpoint);
+            endEffectorL4SetpointEntry.getDouble(Constants.End_Effector_Wrist_L4_Score_Setpoint);
         
         // Elevator
         Constants.Elevator_L1_Setpoint = 
