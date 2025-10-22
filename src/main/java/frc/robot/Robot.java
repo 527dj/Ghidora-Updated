@@ -14,8 +14,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  
   private final boolean kUseLimelight = true;
+  private HotChangeManager hotChangeManager;
 
   public Robot() {
     m_robotContainer = new RobotContainer();
@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
       super.robotInit();
+      hotChangeManager = HotChangeManager.getInstance();
       //Intake.getInstance().zeroIntakeWristWithAbsolute();
       VisionManager.getInstance();
           new PlayMusicCommand(
@@ -43,10 +44,14 @@ public class Robot extends TimedRobot {
     //Battery Voltage Log
     double batteryVoltage = RobotController.getBatteryVoltage();
     SmartDashboard.putNumber("Battery Voltage", batteryVoltage);
+
+    hotChangeManager.updateConstants();
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    hotChangeManager.printCurrentValues();
+  }
 
   @Override
   public void disabledPeriodic() {

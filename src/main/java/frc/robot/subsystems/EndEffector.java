@@ -21,21 +21,8 @@ public class EndEffector extends SubsystemBase {
     private final DigitalInput End_Effector_Front_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_FRONT_PORT);
     private final DigitalInput End_Effector_Back_Photoelectric = new DigitalInput(Devices.END_EFFECTOR_PHOTOELECTRIC_BACK_PORT);
 
-    //Shuffleboard entries
-    private final GenericEntry wristVel =
-        Shuffleboard.getTab("EndEffector").add("Wrist Velocity", Constants.End_Effector_Wrist_Velocity).getEntry();
-    private final GenericEntry wristAccel =
-        Shuffleboard.getTab("EndEffector").add("Wrist Acceleration", Constants.End_Effector_Wrist_Acceleration).getEntry();
-    private final GenericEntry l23Setpoint =
-        Shuffleboard.getTab("EndEffector").add("L2 L3 Setpoint", Constants.End_Effector_Wrist_L2_L3_Score_Setpoint).getEntry();
-    private final GenericEntry l4Setpoint =
-        Shuffleboard.getTab("EndEffector").add("L4 Setpoint", Constants.End_Effector_Wrist_L4_Score_Setpoint).getEntry();
-
-    //Constant copies for periodic updates
     private double wristVelocity = Constants.End_Effector_Wrist_Velocity;
     private double wristAcceleration = Constants.End_Effector_Wrist_Acceleration;
-    private double l23WristSetpoint = Constants.End_Effector_Wrist_L2_L3_Score_Setpoint;
-    private double l4WristSetpoint = Constants.End_Effector_Wrist_L4_Score_Setpoint;
 
     private double setpoint;
 
@@ -81,11 +68,6 @@ public class EndEffector extends SubsystemBase {
         SmartDashboard.putNumber("End Effector Wrist Velocity", getEndEffectorWristVelocity());
         SmartDashboard.putBoolean("End Effector Front Photoelectric Reading", getEndEffectorFrontPhotoElectricReading());
         SmartDashboard.putBoolean("End Effector Back Photoelectric Reading", getEndEffectorBackPhotoElectricReading());
-
-        Constants.End_Effector_Wrist_Velocity = wristVel.getDouble(wristVelocity);
-        Constants.End_Effector_Wrist_Acceleration = wristAccel.getDouble(wristAcceleration);
-        Constants.End_Effector_Wrist_L2_L3_Score_Setpoint = l23Setpoint.getDouble(l23WristSetpoint);
-        Constants.End_Effector_Wrist_L4_Score_Setpoint = l4Setpoint.getDouble(l4WristSetpoint);
     }
 
     //====================End Effector Wrist Methods====================
@@ -137,13 +119,5 @@ public class EndEffector extends SubsystemBase {
 
     public boolean getEndEffectorBackPhotoElectricReading() {
         return !End_Effector_Back_Photoelectric.get();
-    }
-
-    public void printTunedValues() {
-        System.out.println("===== Tuned End Effector Values =====");
-        System.out.println("Velocity: " + wristVelocity);
-        System.out.println("Acceleration: " + wristAcceleration);
-        System.out.println("L2/L3 Setpoint: " + l23WristSetpoint);
-        System.out.println("L4 Setpoint: " + l4WristSetpoint);
     }
 }
