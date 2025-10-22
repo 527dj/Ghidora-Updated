@@ -132,13 +132,13 @@ public class HotChangeManager {
         
         // EndEffector
         Constants.End_Effector_Wrist_Velocity = 
-            endEffectorWristVelocityEntry.getDouble(Constants.End_Effector_Wrist_Velocity);
+            endEffectorWristVelocityEntry.getDouble(EEWristVel);
         Constants.End_Effector_Wrist_Acceleration = 
-            endEffectorWristAccelerationEntry.getDouble(Constants.End_Effector_Wrist_Acceleration);
+            endEffectorWristAccelerationEntry.getDouble(EEWristAccel);
         Constants.End_Effector_Wrist_L2_L3_Score_Setpoint = 
-            endEffectorL2L3SetpointEntry.getDouble(Constants.End_Effector_Wrist_L2_L3_Score_Setpoint);
+            endEffectorL2L3SetpointEntry.getDouble(EEL1L2ScoreSetpoint);
         Constants.End_Effector_Wrist_L4_Score_Setpoint = 
-            endEffectorL4SetpointEntry.getDouble(Constants.End_Effector_Wrist_L4_Score_Setpoint);
+            endEffectorL4SetpointEntry.getDouble(EEL4ScoreSetpoint);
         
         // Elevator
         Constants.Elevator_L1_Setpoint = 
