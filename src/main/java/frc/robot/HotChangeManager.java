@@ -36,10 +36,16 @@ public class HotChangeManager {
     private final GenericEntry elevatorL2SetpointEntry;
     private final GenericEntry elevatorL3SetpointEntry;
     private final GenericEntry elevatorL4SetpointEntry;
-    
+
+    //Variables
+    private double EEWristVel=Constants.End_Effector_Wrist_Velocity;
+    private double EEWristAccel = Constants.End_Effector_Wrist_Acceleration;
+    private double EEL1L2ScoreSetpoint = Constants.End_Effector_Wrist_L2_L3_Score_Setpoint;
+    private double EEL4ScoreSetpoint = Constants.End_Effector_Wrist_L4_Score_Setpoint;
+
     private HotChangeManager() {
         // ==================== 🔥 Intake Hot Changes ====================
-        intakeHotTab = Shuffleboard.getTab("🔥 Intake Hot");
+        intakeHotTab = Shuffleboard.getTab("Intake Hot");
         
         intakeGroundDeployEntry = intakeHotTab
             .add("Ground Deploy Setpoint", Constants.Intake_Ground_Deploy_Setpoint)
@@ -48,36 +54,36 @@ public class HotChangeManager {
             .getEntry();
         
         // ==================== 🔥 EndEffector Hot Changes ====================
-        endEffectorHotTab = Shuffleboard.getTab("🔥 EndEffector Hot");
+        endEffectorHotTab = Shuffleboard.getTab("EndEffector Hot");
         
         // Motion Magic Parameters (Top Row)
         endEffectorWristVelocityEntry = endEffectorHotTab
-            .add("Wrist Velocity", Constants.End_Effector_Wrist_Velocity)
+            .add("Wrist Velocity", EEWristVel)
             .withPosition(0, 0)
             .withSize(2, 1)
             .getEntry();
             
         endEffectorWristAccelerationEntry = endEffectorHotTab
-            .add("Wrist Acceleration", Constants.End_Effector_Wrist_Acceleration)
+            .add("Wrist Acceleration", EEWristAccel)
             .withPosition(2, 0)
             .withSize(2, 1)
             .getEntry();
         
         // Scoring Setpoints (Bottom Row)
         endEffectorL2L3SetpointEntry = endEffectorHotTab
-            .add("L2/L3 Score Setpoint", Constants.End_Effector_Wrist_L2_L3_Score_Setpoint)
+            .add("L2/L3 Score Setpoint", EEL1L2ScoreSetpoint)
             .withPosition(0, 1)
             .withSize(2, 1)
             .getEntry();
             
         endEffectorL4SetpointEntry = endEffectorHotTab
-            .add("L4 Score Setpoint", Constants.End_Effector_Wrist_L4_Score_Setpoint)
+            .add("L4 Score Setpoint", EEL4ScoreSetpoint)
             .withPosition(2, 1)
             .withSize(2, 1)
             .getEntry();
         
         // ==================== 🔥 Elevator Hot Changes ====================
-        elevatorHotTab = Shuffleboard.getTab("🔥 Elevator Hot");
+        elevatorHotTab = Shuffleboard.getTab("Elevator Hot");
         
         // Level Setpoints in 2x2 Grid
         elevatorL1SetpointEntry = elevatorHotTab
@@ -119,6 +125,7 @@ public class HotChangeManager {
      * Called every robot loop in Robot.robotPeriodic().
      */
     public void updateConstants() {
+        System.out.println();
         // Intake
         Constants.Intake_Ground_Deploy_Setpoint = 
             intakeGroundDeployEntry.getDouble(Constants.Intake_Ground_Deploy_Setpoint);
@@ -159,7 +166,7 @@ public class HotChangeManager {
         elevatorL4SetpointEntry.setDouble(24.14);
         
         updateConstants();
-        System.out.println("✓ All hot change values reset to defaults");
+        System.out.println("All hot change values reset to defaults");
     }
     
     /**
