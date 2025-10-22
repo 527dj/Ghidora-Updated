@@ -162,7 +162,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DrivetrainRightAlign"
+                  "name": "DrivetrainLeftAlign"
                 }
               }
             ]
