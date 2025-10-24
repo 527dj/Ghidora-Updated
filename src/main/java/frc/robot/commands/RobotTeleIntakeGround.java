@@ -30,6 +30,7 @@ public class RobotTeleIntakeGround extends Command {
     // Debounced trigger for detecting a game piece
     private final Trigger gamePieceDetected;
     private final Trigger inIntake;
+    private final Trigger inInDexer;
 
     public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint,
             Intake intake, double intakeSetpoint, double intakeSpeed,
@@ -51,9 +52,11 @@ public class RobotTeleIntakeGround extends Command {
         this.opController = opController;
 
         BooleanSupplier isIntakeIn = () -> this.intake.getRollerCurrent()>60;
+        BooleanSupplier isIndexerIn = () -> this.intake.getIndexerCurrent()>60;
         BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
         this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.03);
         this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
+        this.inInDexer = new Trigger(isIndexerIn).debounce(0.001);
         addRequirements(this.elevator, this.endEffector, this.intake);
     }
 
@@ -72,9 +75,12 @@ public class RobotTeleIntakeGround extends Command {
         intake.setIndexerMotorSpeed(-intakeSpeed);
 
         double motorSpeed = speed;
-
-        intakeSetpoint = inIntake.getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
-
+        if(inIntake.getAsBoolean()||inInDexer.getAsBoolean()){
+            intakeSetpoint = Constants.Intake_Between_Setpoint;
+        }
+        else{
+            intakeSetpoint = Constants.Intake_Ground_Deploy_Setpoint;
+        }
         // Debounced photoelectric logic
         if (endEffector.getEndEffectorFrontPhotoElectricReading()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
@@ -83,7 +89,8 @@ public class RobotTeleIntakeGround extends Command {
             controller.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
             opController.setRumble(XboxController.RumbleType.kLeftRumble, Devices.CONTROLLER_RUMBLE);
             opController.setRumble(XboxController.RumbleType.kRightRumble, Devices.CONTROLLER_RUMBLE);
-        } else {
+        } 
+        else {
             endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
             controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);

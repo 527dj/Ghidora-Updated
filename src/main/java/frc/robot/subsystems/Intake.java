@@ -93,6 +93,10 @@ public class Intake extends SubsystemBase {
         return Intake_Roller_Motor.getStatorCurrent().getValueAsDouble();
     }
 
+    public double getIndexerCurrent(){
+        return Intake_Indexer_Master_Motor.getStatorCurrent().getValueAsDouble();
+    }
+
     public void setIntakeWristSetpoint(double setpoint) {
         this.setpoint = setpoint;
     }
