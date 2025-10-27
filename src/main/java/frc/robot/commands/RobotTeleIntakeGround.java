@@ -55,8 +55,8 @@ public class RobotTeleIntakeGround extends Command {
         BooleanSupplier isIndexerIn = () -> this.intake.getIndexerCurrent()>60;
         BooleanSupplier hasGamePiece = () -> this.endEffector.getEndEffectorFrontPhotoElectricReading();
         this.gamePieceDetected = new Trigger(hasGamePiece).debounce(0.03);
-        this.inIntake = new Trigger(isIntakeIn).debounce(0.001);
-        this.inInDexer = new Trigger(isIndexerIn).debounce(0.001);
+        this.inIntake = new Trigger(isIntakeIn); //.debounce(0.001);
+        this.inInDexer = new Trigger(isIndexerIn);//.debounce(0.001);
         addRequirements(this.elevator, this.endEffector, this.intake);
     }
 
@@ -75,13 +75,17 @@ public class RobotTeleIntakeGround extends Command {
         intake.setIndexerMotorSpeed(-intakeSpeed);
 
         double motorSpeed = speed;
-        if(inIntake.getAsBoolean()||inInDexer.getAsBoolean()){
-            intakeSetpoint = Constants.Intake_Between_Setpoint;
-        }
-        else{
-            intakeSetpoint = Constants.Intake_Ground_Deploy_Setpoint;
-        }
-        // Debounced photoelectric logic
+        intakeSetpoint = inIntake.getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
+
+        // if(inIntake.getAsBoolean()||inInDexer.getAsBoolean()){
+        //     intakeSetpoint = Constants.Intake_Between_Setpoint;
+        //     System.out.println("INBETWEEN RN");
+        // }
+        // else{
+        //     intakeSetpoint = Constants.Intake_Ground_Deploy_Setpoint;
+        //     System.out.println("GROUND DEPLOY RN");
+        // }
+
         if (endEffector.getEndEffectorFrontPhotoElectricReading()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);
 
