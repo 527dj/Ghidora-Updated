@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          this.targetPosition = targetPosition;
          FBPIDController.setTolerance(0.02);
          LRPIDController.setTolerance(0.02);
+         rotationPIDController.setTolerance(0.05); // Add tolerance for rotation
          addRequirements(drivetrain);
          addRequirements(visionManager);
  
@@ -144,13 +145,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          double RotSpeed;
          if (Rot_Reading != 0.0) {
              RotSpeed = rotationPIDController.calculate(Rot_Reading, 0.0);
-         } else {
+         } 
+         else {
              RotSpeed = 0.0;
          }
   
          // Stop movement if at goal
          FBSpeed = FBPIDController.atGoal() ? 0 : FBSpeed;
          LRSpeed = LRPIDController.atGoal() ? 0 : LRSpeed;
+         RotSpeed = rotationPIDController.atGoal() ? 0 : RotSpeed; // Stop rotation when at goal
 
          SwerveRequest.RobotCentric drivetrainRequest = new SwerveRequest.RobotCentric()
                  .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
@@ -163,6 +166,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
          SmartDashboard.putNumber("FBSpeed", FBSpeed);
          SmartDashboard.putNumber("LRSpeed", LRSpeed);
          SmartDashboard.putNumber("RotSpeed", RotSpeed);
+         SmartDashboard.putNumber("Rot_Reading", Rot_Reading); // Add rotation debugging
      }
  
      @Override
