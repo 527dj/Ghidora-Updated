@@ -20,6 +20,7 @@ public class RobotTeleIntakeGround extends Command {
     private final Intake intake;
     private double intakeSetpoint;
     private final double intakeSpeed;
+    private final double indexerSpeed;
 
     private final Elevator elevator;
     private final double elevatorSetpoint;
@@ -35,7 +36,7 @@ public class RobotTeleIntakeGround extends Command {
     public RobotTeleIntakeGround(EndEffector endEffector, double speed, double setpoint,
             Intake intake, double intakeSetpoint, double intakeSpeed,
             Elevator elevator, double elevatorSetpoint,
-            XboxController controller, XboxController opController) {
+            XboxController controller, XboxController opController, double indexerSpeed) {
 
         this.speed = speed;
         this.endEffector = EndEffector.getInstance();
@@ -44,6 +45,7 @@ public class RobotTeleIntakeGround extends Command {
         this.intake = Intake.getInstance();
         this.intakeSetpoint = intakeSetpoint;
         this.intakeSpeed = intakeSpeed;
+        this.indexerSpeed = indexerSpeed;
 
         this.elevator = Elevator.getInstance();
         this.elevatorSetpoint = elevatorSetpoint;
@@ -72,19 +74,10 @@ public class RobotTeleIntakeGround extends Command {
     public void execute() {
         // Roller Control
         intake.setIntakeRollerMotorSpeed(intakeSpeed);
-        intake.setIndexerMotorSpeed(-intakeSpeed);
+        intake.setIndexerMotorSpeed(-indexerSpeed);
 
         double motorSpeed = speed;
         intakeSetpoint = inIntake.getAsBoolean() ? Constants.Intake_Between_Setpoint : Constants.Intake_Ground_Deploy_Setpoint;
-
-        // if(inIntake.getAsBoolean()||inInDexer.getAsBoolean()){
-        //     intakeSetpoint = Constants.Intake_Between_Setpoint;
-        //     System.out.println("INBETWEEN RN");
-        // }
-        // else{
-        //     intakeSetpoint = Constants.Intake_Ground_Deploy_Setpoint;
-        //     System.out.println("GROUND DEPLOY RN");
-        // }
 
         if (endEffector.getEndEffectorFrontPhotoElectricReading()) {
             endEffector.setEndEffectorRollerMotorSpeed(Constants.Absolute_Zero);

@@ -77,6 +77,7 @@ public class Constants {
 
     //Intake Speeds
     public static final double Intake_Ground_Run_Speed = 0.75;
+    public static final double Indexer_Ground_Run_Speed = 0.9;
     public static final double Outake_Ground_Run_Speed = -0.2;
 
     //Intake Setpoints
@@ -102,6 +103,7 @@ public class Constants {
     //End Effector Current Limits
     public static final double End_Effector_Wrist_Current_Limit = 80.0;
     public static final double End_Effector_Roller_Current_Limit = 80.0;
+    public static final double End_Effector_Algae_Current_Limit = 79;
 
     //~~~~~End Effector Speeds~~~~~
     //Coral
