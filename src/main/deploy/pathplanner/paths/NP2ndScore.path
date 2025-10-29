@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.55030737704918,
-        "y": 5.937038934426229
+        "x": 5.2985655737704915,
+        "y": 5.709272540983607
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.455532786885246,
-        "y": 5.805174180327868
+        "x": 0.3836065573770491,
+        "y": 5.865112704918032
       },
       "prevControl": {
-        "x": 0.8751024590163928,
-        "y": 5.769211065573771
+        "x": 1.1628073770491802,
+        "y": 5.8171618852459
       },
       "nextControl": {
-        "x": 0.023104958784885832,
-        "y": 5.84223942273647
+        "x": 0.13407858989633273,
+        "y": 5.880468272147615
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 5.121875
       },
       "prevControl": {
-        "x": 3.5643024173058744,
-        "y": 4.652611752307409
+        "x": 3.380532786885246,
+        "y": 5.1698258196721305
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,32 +51,18 @@
     },
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -1.6000247151477403
+      "rotationDegrees": -2.290610042638533
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.9993247805536798,
-      "maxWaypointRelativePos": 0.22687373396353827,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 6.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 10.0,
     "unlimited": false
   },
   "goalEndState": {
@@ -89,5 +75,5 @@
     "velocity": 0,
     "rotation": -119.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

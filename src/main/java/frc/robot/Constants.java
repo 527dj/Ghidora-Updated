@@ -99,8 +99,6 @@ public class Constants {
     public static final double End_Effector_Wrist_Velocity_Slower = 100;
     public static final double End_Effector_Wrist_Acceleration_Slower = 200;
 
-
-    
     //End Effector Current Limits
     public static final double End_Effector_Wrist_Current_Limit = 80.0;
     public static final double End_Effector_Roller_Current_Limit = 80.0;
