@@ -120,4 +120,16 @@ public class Intake extends SubsystemBase {
     public void setIndexerMotorSpeed(double speed) {
         Intake_Indexer_Master_Motor.set(speed);
     }
+
+    public void coastInit(){
+        var intakeWristConfigs = new TalonFXConfiguration();
+        intakeWristConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        Intake_Wrist_Motor.getConfigurator().apply(intakeWristConfigs);
+    }
+
+    public void brakeInit(){
+        var intakeWristConfigs1 = new TalonFXConfiguration();
+        intakeWristConfigs1.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        Intake_Wrist_Motor.getConfigurator().apply(intakeWristConfigs1);
+    }
 }
