@@ -92,14 +92,15 @@ public class Constants {
     public static final double End_Effector_Wrist_kP = 2.0;
     public static final double End_Effector_Wrist_kI = 0.0;
     public static final double End_Effector_Wrist_kD = 0.03;
-    public static double End_Effector_Wrist_Velocity = 175.0; //HOT CHANGE ENABLED
-    public static double End_Effector_Wrist_Acceleration   = 375.0; //HOT CHANGE ENABLED
-    public static final double End_Effector_Wrist_Velocity_Slow = 150;
-    public static final double End_Effector_Wrist_Acceleration_Slow = 300;
+    public static double End_Effector_Wrist_Velocity = 100.0; //HOT CHANGE ENABLED
+    public static double End_Effector_Wrist_Acceleration   = 200.0; //HOT CHANGE ENABLED
+    public static final double End_Effector_Wrist_Velocity_Slow = 200;
+    public static final double End_Effector_Wrist_Acceleration_Slow = 200;
     public static final double End_Effector_Wrist_Velocity_Slower = 100;
     public static final double End_Effector_Wrist_Acceleration_Slower = 200;
 
 
+    
     //End Effector Current Limits
     public static final double End_Effector_Wrist_Current_Limit = 80.0;
     public static final double End_Effector_Roller_Current_Limit = 80.0;
