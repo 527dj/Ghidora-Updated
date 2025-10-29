@@ -16,43 +16,27 @@
     },
     {
       "anchor": {
-        "x": 3.6802254098360656,
-        "y": 5.433555327868853
+        "x": 1.5703893442634977,
+        "y": 5.82914959017086
       },
       "prevControl": {
-        "x": 4.07627964045408,
-        "y": 5.3497202592071265
+        "x": 1.9899590163946455,
+        "y": 5.793186475416762
       },
       "nextControl": {
-        "x": 3.255620303117481,
-        "y": 5.52343392409121
+        "x": 1.1379615161631376,
+        "y": 5.866214832579462
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.474487704918033,
-        "y": 6.955993852459016
-      },
-      "prevControl": {
-        "x": 1.0515866873768764,
-        "y": 7.044772932644017
-      },
-      "nextControl": {
-        "x": 2.5147675627641437,
-        "y": 6.737609206681773
-      },
-      "isLocked": false,
-      "linkedName": "NPIntakePoint"
-    },
-    {
-      "anchor": {
-        "x": 3.6802254098360656,
+        "x": 3.7521516393454646,
         "y": 5.241752049180327
       },
       "prevControl": {
-        "x": 3.5404525424374307,
+        "x": 3.6123787719468297,
         "y": 5.44902854456551
       },
       "nextControl": null,
@@ -62,15 +46,19 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
+    },
+    {
       "waypointRelativePos": 1,
-      "rotationDegrees": -35.36246188706919
+      "rotationDegrees": -1.6000247151477403
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 2.1096866096866096,
-      "maxWaypointRelativePos": 1.0441595441595442,
+      "minWaypointRelativePos": 0.8100664767331435,
+      "maxWaypointRelativePos": 0.0,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
