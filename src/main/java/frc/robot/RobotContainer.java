@@ -204,6 +204,8 @@ public class RobotContainer {
         //====================Elevator Manual Zero=====================
         operatorController.y().onTrue(new ZeroElevator(Elevator.getInstance()));
 
+        //====================Middle Align=====================
+        operatorController.povRight().whileTrue(new DrivetrainRightAlign(drivetrain, VisionManager.getInstance(), ALIGN_STATES.MIDDLE));
         /// //====================End Effector Wrist Jog=====================
         // operatorController.povRight().whileTrue(new EndEffectorWristJog(EndEffector.getInstance(), () -> operatorController.getRightY() * Devices.JOYSTICK_JOG_SPEED_MULTIPLIER));
 
