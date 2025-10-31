@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     hotChangeManager.printCurrentValues();
-    Intake.getInstance().coastInit();
+    // Intake.getInstance().coastInit();
   }
 
   @Override
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    Intake.getInstance().brakeInit();
+    // Intake.getInstance().brakeInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Intake.getInstance().brakeInit();
+    // Intake.getInstance().brakeInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
