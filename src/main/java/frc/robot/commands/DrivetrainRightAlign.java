@@ -131,7 +131,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 goal = -0.1875;//-0.1775
             } 
             else if (this.targetPosition == ALIGN_STATES.RIGHT) {
-                goal = 0.18;//0.1775
+                goal = 0.1775;//0.18
             } 
             else {
                 goal = 0.0;
