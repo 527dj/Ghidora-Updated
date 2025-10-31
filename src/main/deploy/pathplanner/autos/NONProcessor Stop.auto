@@ -112,7 +112,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "NP2ndScore"
+                  "pathName": "Test 2nd Score"
                 }
               },
               {
@@ -124,7 +124,32 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 6.5
+                  "waitTime": 2.3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Test 2nd Score 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.1
                 }
               }
             ]

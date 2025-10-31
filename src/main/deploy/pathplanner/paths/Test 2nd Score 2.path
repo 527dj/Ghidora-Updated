@@ -3,67 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.010860655737704,
-        "y": 5.241752049180327
+        "x": 0.7672131147540984,
+        "y": 5.865112704918032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.245694434269838,
-        "y": 5.545487090779033
+        "x": 0.20379098360655745,
+        "y": 5.829149590163934
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "pt1 End"
     },
     {
       "anchor": {
-        "x": -0.1,
-        "y": 5.7
+        "x": -0.05993852459016393,
+        "y": 5.841137295081967
       },
       "prevControl": {
-        "x": 0.17981557377049182,
-        "y": 5.697284836065577
+        "x": -1.0599385245901636,
+        "y": 5.841137295081967
       },
       "nextControl": {
-        "x": -0.34998823132164925,
-        "y": 5.702425737140252
+        "x": 0.940061475409835,
+        "y": 5.841137295081967
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 5.193801229508197
+        "x": 3.668237704918033,
+        "y": 5.277715163934426
       },
       "prevControl": {
-        "x": 3.3016737097289353,
-        "y": 5.244453756973312
+        "x": 3.068852459016393,
+        "y": 5.5294569672131155
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "2ndscoreend"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -2.290610042638533
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "",
-      "waypointRelativePos": 0.8156650911546234,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
@@ -80,7 +64,7 @@
   "folder": "NONProcessor",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
