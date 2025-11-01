@@ -158,8 +158,8 @@ public class Constants {
     public static double Elevator_L4_Setpoint = 24.14; //HOT CHANGE ENABLED 24.14
 
     //Algae
-    public static final double Elevator_Bottom_Algae_Setpoint = 13.0;
-    public static final double Elevator_Top_Algae_Setpoint = 19.5;
+    public static final double Elevator_Bottom_Algae_Setpoint = 12.0;
+    public static final double Elevator_Top_Algae_Setpoint = 18.5;
     public static final double Elevator_Ground_Algae_Setpoint = 1.0;
     public static final double Elevator_Processor_Score_Setpoint = 0.0;
     public static final double Elevator_Net_Score_Setpoint = 24.14;
