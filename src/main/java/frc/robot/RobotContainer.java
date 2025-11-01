@@ -42,6 +42,7 @@ import frc.robot.subsystems.Climb;
 import frc.robot.commands.AlgaeNetScore;
 import frc.robot.commands.ClimbRollerRun;
 import frc.robot.commands.ClimbWristRun;
+import frc.robot.ElasticManager;
 //Limelight Imports
 import frc.robot.commands.DrivetrainRightAlign;
 import frc.robot.commands.DrivetrainTurnToAngle;
@@ -87,7 +88,7 @@ public class RobotContainer {
         configureBindings();
 
         autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        ElasticManager.getInstance().sendAutoChooser(autoChooser);
     }
 
     private void configureBindings() {
