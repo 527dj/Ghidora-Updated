@@ -20,7 +20,9 @@ public class RobotAlgaeIntake extends Command {
     private final double turnMultiplier;
     private final XboxController controller;
 
-    public RobotAlgaeIntake(EndEffector endEffector, double endEffectorSetpoint, double endEffectorSpeed, Elevator elevator, double elevatorSetpoint, Drivetrain drivetrain, double speedMultiplier, double turnMultiplier, XboxController controller) {
+    private final boolean slow;
+
+    public RobotAlgaeIntake(EndEffector endEffector, double endEffectorSetpoint, double endEffectorSpeed, Elevator elevator, double elevatorSetpoint, Drivetrain drivetrain, double speedMultiplier, double turnMultiplier, XboxController controller, boolean slow) {
         this.endEffector = EndEffector.getInstance();
         this.endEffectorSetpoint = endEffectorSetpoint;
         this.endEffectorSpeed = endEffectorSetpoint;
@@ -32,6 +34,7 @@ public class RobotAlgaeIntake extends Command {
         this.speedMultiplier = speedMultiplier;
         this.turnMultiplier = turnMultiplier;
         this.controller = controller;
+        this.slow = slow;
         addRequirements(elevator);
         addRequirements(endEffector);
         addRequirements(drivetrain);
@@ -60,7 +63,8 @@ public class RobotAlgaeIntake extends Command {
     public void execute() {
         endEffector.goToEndEffectorWristSetpoint();
         elevator.goToElevatorSetpoint();
-        drivetrain.slowDrivetrain(controller, speedMultiplier, turnMultiplier);
+        if(slow)
+            drivetrain.slowDrivetrain(controller, speedMultiplier, turnMultiplier);
         endEffector.setEndEffectorRollerMotorSpeed(endEffectorSpeed);
     }
 
