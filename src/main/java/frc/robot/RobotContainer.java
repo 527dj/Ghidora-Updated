@@ -78,6 +78,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("GrabLowerAlgae", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Remove_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Bottom_Algae_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID(),false));
         NamedCommands.registerCommand("HomeAlgae", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Algae_Stow_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Absolute_Zero, drivetrain, Constants.Drivetrain_Speed_Multiplier, Constants.Drivetrain_Turn_Multiplier, driverController.getHID(),true));
         NamedCommands.registerCommand("BargeScore", new RobotAlgaeIntake(EndEffector.getInstance(), Constants.End_Effector_Wrist_Net_Score_Setpoint, Constants.End_Effector_Algae_Intake_Speed, Elevator.getInstance(), Constants.Elevator_Net_Score_Setpoint, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID(),true));
+        NamedCommands.registerCommand("AlgaeShoot", new AlgaeNetScore(EndEffector.getInstance(), Constants.End_Effector_Algae_Score_Speed, drivetrain, Constants.Drivetrain_Elevator_Speed_Multiplier, Constants.Drivetrain_Elevator_Turn_Multiplier, driverController.getHID()));
         //====================Zeroing====================
         NamedCommands.registerCommand("RobotHome", new RobotHome(EndEffector.getInstance(), Constants.Absolute_Zero, Elevator.getInstance(), Constants.Absolute_Zero));
         NamedCommands.registerCommand("EndEffectorStop", new EndEffectorScore(EndEffector.getInstance(), Constants.Absolute_Zero));
@@ -235,7 +236,7 @@ public class RobotContainer {
 
 
     }
-    
+
         public Command getAutonomousCommand() {
             return autoChooser.getSelected();
         }
