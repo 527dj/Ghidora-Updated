@@ -232,10 +232,10 @@ public class ShuffleboardManager {
             .withPosition(0, 2)
             .withSize(4, 1);
 
-        visionTab.add("Camera Stream", CameraServer.startAutomaticCapture("Limelight", "http://10.71.57.11:5800/stream.mjpg"))
-            .withWidget(BuiltInWidgets.kCameraStream)
-            .withPosition(5, 2)
-            .withSize(3,2);
+        // visionTab.add("Camera Stream", CameraServer.startAutomaticCapture("Limelight", "http://10.71.57.11:5800/"))
+        //     .withWidget(BuiltInWidgets.kCameraStream)
+        //     .withPosition(5, 2)
+        //     .withSize(3,2);
     }
     
     /**
