@@ -89,6 +89,7 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser("DavisProcessor");
         ShuffleboardManager.getInstance().sendAutoChooser(autoChooser);
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
     private void configureBindings() {
