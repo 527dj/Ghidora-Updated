@@ -129,7 +129,7 @@ public class ShuffleboardManager {
         // Alliance color
         allianceEntry = mainTab.add("Alliance", "Unknown")
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(6, 2)
+            .withPosition(6, 3)
             .withSize(2, 1)
             .getEntry();
         
@@ -154,14 +154,14 @@ public class ShuffleboardManager {
         
         coralEntry = mainTab.add("Coral Detected?", false)
             .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(6, 3)
-            .withSize(2, 1)
+            .withPosition(6, 2)
+            .withSize(1, 1)
             .getEntry();
         
         AlgaeEntry = mainTab.add("Algae Detected?", false)
             .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(8, 3)
-            .withSize(2, 1)
+            .withPosition(7, 2)
+            .withSize(1, 1)
             .getEntry();
     }
     
@@ -441,26 +441,26 @@ public class ShuffleboardManager {
     public void updateLimelightData() {
         String llName = "limelight-dihlite";
         
-        // Get latest results
-        LimelightResults results = LimelightHelpers.getLatestResults(llName);
+        // First, check basic NetworkTables values directly (these always work)
+        boolean hasTarget = LimelightHelpers.getTV(llName);
+        limelightValidEntry.setBoolean(hasTarget);
         
-        if (results != null && results.valid) {
-            limelightValidEntry.setBoolean(true);
-            
-            // Update basic targeting data
-            limelightTxEntry.setDouble(Math.round(LimelightHelpers.getTX(llName) * 100.0) / 100.0);
-            limelightTyEntry.setDouble(Math.round(LimelightHelpers.getTY(llName) * 100.0) / 100.0);
-            limelightTaEntry.setDouble(Math.round(LimelightHelpers.getTA(llName) * 100.0) / 100.0);
-            
-            // Pipeline
-            limelightPipelineEntry.setDouble(LimelightHelpers.getCurrentPipelineIndex(llName));
+        // Always update basic targeting data from NetworkTables
+        limelightTxEntry.setDouble(Math.round(LimelightHelpers.getTX(llName) * 100.0) / 100.0);
+        limelightTyEntry.setDouble(Math.round(LimelightHelpers.getTY(llName) * 100.0) / 100.0);
+        limelightTaEntry.setDouble(Math.round(LimelightHelpers.getTA(llName) * 100.0) / 100.0);
+        limelightPipelineEntry.setDouble(LimelightHelpers.getCurrentPipelineIndex(llName));
+        
+        if (hasTarget) {
+            // Try to get JSON results for more detailed info
+            LimelightResults results = LimelightHelpers.getLatestResults(llName);
             
             // MegaTag2 status
             var mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
             limelightMT2ValidEntry.setBoolean(LimelightHelpers.validPoseEstimate(mt2));
             
-            // If we have fiducial targets, show tag count and distance
-            if (results.targets_Fiducials != null && results.targets_Fiducials.length > 0) {
+            // If we have fiducial targets from JSON, show tag count and distance
+            if (results != null && results.targets_Fiducials != null && results.targets_Fiducials.length > 0) {
                 limelightTagCountEntry.setInteger(results.targets_Fiducials.length);
                 
                 // Get closest tag distance
@@ -468,14 +468,18 @@ public class ShuffleboardManager {
                 double distance = closestTag.getTargetPose_CameraSpace().getTranslation().getNorm();
                 limelightDistanceEntry.setDouble(Math.round(distance * 100.0) / 100.0);
             } else {
-                limelightTagCountEntry.setInteger(0);
-                limelightDistanceEntry.setDouble(0.0);
+                // Fallback: try to get raw fiducials from NetworkTables
+                var rawFiducials = LimelightHelpers.getRawFiducials(llName);
+                if (rawFiducials != null && rawFiducials.length > 0) {
+                    limelightTagCountEntry.setInteger(rawFiducials.length);
+                    limelightDistanceEntry.setDouble(Math.round(rawFiducials[0].distToCamera * 100.0) / 100.0);
+                } else {
+                    limelightTagCountEntry.setInteger(0);
+                    limelightDistanceEntry.setDouble(0.0);
+                }
             }
         } else {
-            limelightValidEntry.setBoolean(false);
-            limelightTxEntry.setDouble(0.0);
-            limelightTyEntry.setDouble(0.0);
-            limelightTaEntry.setDouble(0.0);
+            // No target detected
             limelightDistanceEntry.setDouble(0.0);
             limelightTagCountEntry.setInteger(0);
             limelightMT2ValidEntry.setBoolean(false);
