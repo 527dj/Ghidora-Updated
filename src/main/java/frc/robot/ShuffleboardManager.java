@@ -4,24 +4,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import java.util.Map;
 
 /**
- * Manages all Elastic dashboard widgets and telemetry.
- * Provides a centralized interface for displaying robot data.
+ * Manages Shuffleboard dashboard using only WPILib built-in tools.
+ * No external Elastic library required - uses NetworkTables and Shuffleboard.
  */
-public class ElasticManager {
-    private static ElasticManager instance;
+public class ShuffleboardManager {
+    private static ShuffleboardManager instance;
     
     // Field visualization
     private final Field2d field;
@@ -36,6 +34,9 @@ public class ElasticManager {
     private GenericEntry matchTimeEntry;
     private GenericEntry batteryVoltageEntry;
     private GenericEntry allianceEntry;
+    private GenericEntry poseXEntry;
+    private GenericEntry poseYEntry;
+    private GenericEntry poseRotationEntry;
     
     // Vision Tab Entries
     private GenericEntry limelightValidEntry;
@@ -45,6 +46,7 @@ public class ElasticManager {
     private GenericEntry limelightDistanceEntry;
     private GenericEntry limelightTagCountEntry;
     private GenericEntry limelightPipelineEntry;
+    private GenericEntry limelightMT2ValidEntry;
     
     // Tunable Entries (Hot Changes)
     private GenericEntry intakeGroundDeployEntry;
@@ -60,14 +62,19 @@ public class ElasticManager {
     // Diagnostics
     private GenericEntry cpuTempEntry;
     private GenericEntry canUtilizationEntry;
+    private GenericEntry drivetrainStatusEntry;
+    private GenericEntry intakeStatusEntry;
+    private GenericEntry endEffectorStatusEntry;
+    private GenericEntry elevatorStatusEntry;
+    private GenericEntry visionStatusEntry;
     
-    private ElasticManager() {
-        System.out.println("====================Elastic Dashboard Initializing====================");
+    private ShuffleboardManager() {
+        System.out.println("====================Shuffleboard Dashboard Initializing====================");
         
         // Initialize field
         field = new Field2d();
         
-        // Create tabs with emojis for easy identification
+        // Create tabs
         mainTab = Shuffleboard.getTab("Main");
         visionTab = Shuffleboard.getTab("Vision");
         tunablesTab = Shuffleboard.getTab("Tunables");
@@ -78,12 +85,12 @@ public class ElasticManager {
         setupTunablesTab();
         setupDiagnosticsTab();
         
-        System.out.println("====================Elastic Dashboard Online====================");
+        System.out.println("====================Shuffleboard Dashboard Online====================");
     }
     
-    public static ElasticManager getInstance() {
+    public static ShuffleboardManager getInstance() {
         if (instance == null) {
-            instance = new ElasticManager();
+            instance = new ShuffleboardManager();
         }
         return instance;
     }
@@ -94,22 +101,23 @@ public class ElasticManager {
     private void setupMainTab() {
         // Field widget - large and prominent
         mainTab.add("Field", field)
+            .withWidget(BuiltInWidgets.kField)
             .withPosition(0, 0)
             .withSize(6, 4);
         
-        // Match time - large display
+        // Match time
         matchTimeEntry = mainTab.add("Match Time", 0.0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(6, 0)
             .withSize(2, 1)
             .getEntry();
         
-        // Battery voltage with color coding
+        // Battery voltage
         batteryVoltageEntry = mainTab.add("Battery", 12.0)
             .withWidget(BuiltInWidgets.kVoltageView)
             .withPosition(6, 1)
             .withSize(2, 1)
-            .withProperties(Map.of("min", 10.0, "max", 13.0))
+            .withProperties(Map.of("Min", 10.0, "Max", 13.0, "Center", 12.0))
             .getEntry();
         
         // Alliance color
@@ -120,20 +128,23 @@ public class ElasticManager {
             .getEntry();
         
         // Robot pose components
-        mainTab.addDouble("Pose X", () -> field.getRobotPose().getX())
+        poseXEntry = mainTab.add("Pose X", 0.0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(8, 0)
-            .withSize(2, 1);
+            .withSize(2, 1)
+            .getEntry();
         
-        mainTab.addDouble("Pose Y", () -> field.getRobotPose().getY())
+        poseYEntry = mainTab.add("Pose Y", 0.0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(8, 1)
-            .withSize(2, 1);
+            .withSize(2, 1)
+            .getEntry();
         
-        mainTab.addDouble("Rotation", () -> field.getRobotPose().getRotation().getDegrees())
+        poseRotationEntry = mainTab.add("Rotation", 0.0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(8, 2)
-            .withSize(2, 1);
+            .withSize(2, 1)
+            .getEntry();
     }
     
     /**
@@ -150,21 +161,21 @@ public class ElasticManager {
         // Limelight crosshair offsets
         limelightTxEntry = visionTab.add("TX (Horizontal)", 0.0)
             .withWidget(BuiltInWidgets.kNumberBar)
-            .withProperties(Map.of("min", -30.0, "max", 30.0))
+            .withProperties(Map.of("Min", -30.0, "Max", 30.0))
             .withPosition(2, 0)
             .withSize(2, 1)
             .getEntry();
         
         limelightTyEntry = visionTab.add("TY (Vertical)", 0.0)
             .withWidget(BuiltInWidgets.kNumberBar)
-            .withProperties(Map.of("min", -30.0, "max", 30.0))
+            .withProperties(Map.of("Min", -30.0, "Max", 30.0))
             .withPosition(4, 0)
             .withSize(2, 1)
             .getEntry();
         
         limelightTaEntry = visionTab.add("TA (Area %)", 0.0)
             .withWidget(BuiltInWidgets.kNumberBar)
-            .withProperties(Map.of("min", 0.0, "max", 100.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 100.0))
             .withPosition(6, 0)
             .withSize(2, 1)
             .getEntry();
@@ -190,96 +201,101 @@ public class ElasticManager {
             .withSize(2, 1)
             .getEntry();
         
-        // Additional vision metrics
-        visionTab.addBoolean("MegaTag2 Valid", 
-            () -> LimelightHelpers.validPoseEstimate(
-                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-dihlite")))
+        // MegaTag2 status
+        limelightMT2ValidEntry = visionTab.add("MegaTag2 Valid", false)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(6, 1)
-            .withSize(2, 1);
+            .withSize(2, 1)
+            .getEntry();
+        
+        // Camera stream info
+        visionTab.add("Camera URL", "http://limelight-dihlite.local:5800")
+            .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(0, 2)
+            .withSize(4, 1);
     }
     
     /**
      * Setup tunables tab for on-the-fly adjustments
      */
     private void setupTunablesTab() {
-        // Intake tunables
-        tunablesTab.add("INTAKE", "")
+        // Intake section header
+        tunablesTab.add("=== INTAKE ===", "")
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 0)
             .withSize(4, 1);
         
         intakeGroundDeployEntry = tunablesTab.add("Ground Deploy", Constants.Intake_Ground_Deploy_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", -15.0, "max", 0.0))
+            .withProperties(Map.of("Min", -15.0, "Max", 0.0))
             .withPosition(0, 1)
-            .withSize(2, 1)
+            .withSize(4, 1)
             .getEntry();
         
-        // End Effector tunables
-        tunablesTab.add("END EFFECTOR", "")
+        // End Effector section
+        tunablesTab.add("=== END EFFECTOR ===", "")
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 2)
             .withSize(4, 1);
         
         endEffectorWristVelocityEntry = tunablesTab.add("Wrist Velocity", Constants.End_Effector_Wrist_Velocity)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 50.0, "max", 200.0))
+            .withProperties(Map.of("Min", 50.0, "Max", 200.0))
             .withPosition(0, 3)
             .withSize(2, 1)
             .getEntry();
         
         endEffectorWristAccelerationEntry = tunablesTab.add("Wrist Accel", Constants.End_Effector_Wrist_Acceleration)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 100.0, "max", 400.0))
+            .withProperties(Map.of("Min", 100.0, "Max", 400.0))
             .withPosition(2, 3)
             .withSize(2, 1)
             .getEntry();
         
         endEffectorL2L3SetpointEntry = tunablesTab.add("L2/L3 Setpoint", Constants.End_Effector_Wrist_L2_L3_Score_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 30.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 30.0))
             .withPosition(0, 4)
             .withSize(2, 1)
             .getEntry();
         
         endEffectorL4SetpointEntry = tunablesTab.add("L4 Setpoint", Constants.End_Effector_Wrist_L4_Score_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 30.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 30.0))
             .withPosition(2, 4)
             .withSize(2, 1)
             .getEntry();
         
-        // Elevator tunables
-        tunablesTab.add("ELEVATOR", "")
+        // Elevator section
+        tunablesTab.add("=== ELEVATOR ===", "")
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(4, 0)
             .withSize(4, 1);
         
         elevatorL1Entry = tunablesTab.add("L1", Constants.Elevator_L1_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 5.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 5.0))
             .withPosition(4, 1)
             .withSize(2, 1)
             .getEntry();
         
         elevatorL2Entry = tunablesTab.add("L2", Constants.Elevator_L2_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 10.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 10.0))
             .withPosition(6, 1)
             .withSize(2, 1)
             .getEntry();
         
         elevatorL3Entry = tunablesTab.add("L3", Constants.Elevator_L3_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 15.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 15.0))
             .withPosition(4, 2)
             .withSize(2, 1)
             .getEntry();
         
         elevatorL4Entry = tunablesTab.add("L4", Constants.Elevator_L4_Setpoint)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 30.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 30.0))
             .withPosition(6, 2)
             .withSize(2, 1)
             .getEntry();
@@ -289,46 +305,50 @@ public class ElasticManager {
      * Setup diagnostics tab for system health monitoring
      */
     private void setupDiagnosticsTab() {
-        // CPU Temperature
+        // System metrics
         cpuTempEntry = diagnosticsTab.add("CPU Temp (C)", 0.0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 0)
             .withSize(2, 1)
             .getEntry();
         
-        // CAN bus utilization
         canUtilizationEntry = diagnosticsTab.add("CAN Usage (%)", 0.0)
             .withWidget(BuiltInWidgets.kNumberBar)
-            .withProperties(Map.of("min", 0.0, "max", 100.0))
+            .withProperties(Map.of("Min", 0.0, "Max", 100.0))
             .withPosition(2, 0)
             .withSize(2, 1)
             .getEntry();
         
-        // Subsystem status indicators
-        diagnosticsTab.addBoolean("Drivetrain", () -> true)
+        // Subsystem status
+        drivetrainStatusEntry = diagnosticsTab.add("Drivetrain", true)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(0, 1)
-            .withSize(1, 1);
+            .withSize(1, 1)
+            .getEntry();
         
-        diagnosticsTab.addBoolean("Intake", () -> true)
+        intakeStatusEntry = diagnosticsTab.add("Intake", true)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(1, 1)
-            .withSize(1, 1);
+            .withSize(1, 1)
+            .getEntry();
         
-        diagnosticsTab.addBoolean("EndEffector", () -> true)
+        endEffectorStatusEntry = diagnosticsTab.add("EndEffector", true)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(2, 1)
-            .withSize(1, 1);
+            .withSize(1, 1)
+            .getEntry();
         
-        diagnosticsTab.addBoolean("Elevator", () -> true)
+        elevatorStatusEntry = diagnosticsTab.add("Elevator", true)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(3, 1)
-            .withSize(1, 1);
+            .withSize(1, 1)
+            .getEntry();
         
-        diagnosticsTab.addBoolean("Vision", () -> LimelightHelpers.getTV("limelight-dihlite"))
+        visionStatusEntry = diagnosticsTab.add("Vision", false)
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(4, 1)
-            .withSize(1, 1);
+            .withSize(1, 1)
+            .getEntry();
     }
     
     /**
@@ -338,7 +358,7 @@ public class ElasticManager {
         mainTab.add("Auto Selector", chooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
             .withPosition(0, 4)
-            .withSize(3, 1);
+            .withSize(4, 1);
     }
     
     /**
@@ -346,25 +366,23 @@ public class ElasticManager {
      */
     public void updateRobotPose(Pose2d pose) {
         field.setRobotPose(pose);
+        poseXEntry.setDouble(Math.round(pose.getX() * 100.0) / 100.0);
+        poseYEntry.setDouble(Math.round(pose.getY() * 100.0) / 100.0);
+        poseRotationEntry.setDouble(Math.round(pose.getRotation().getDegrees() * 10.0) / 10.0);
     }
     
     /**
      * Update match time
      */
     public void updateMatchTime(double time) {
-        matchTimeEntry.setDouble(time);
+        matchTimeEntry.setDouble(Math.round(time * 10.0) / 10.0);
     }
     
     /**
      * Update battery voltage
      */
     public void updateBatteryVoltage(double voltage) {
-        batteryVoltageEntry.setDouble(voltage);
-        
-        // Send alert if low
-        if (voltage < 11.5) {
-            SmartDashboard.putString("Alert", String.format("LOW BATTERY: %.2fV", voltage));
-        }
+        batteryVoltageEntry.setDouble(Math.round(voltage * 100.0) / 100.0);
     }
     
     /**
@@ -387,12 +405,16 @@ public class ElasticManager {
             limelightValidEntry.setBoolean(true);
             
             // Update basic targeting data
-            limelightTxEntry.setDouble(LimelightHelpers.getTX(llName));
-            limelightTyEntry.setDouble(LimelightHelpers.getTY(llName));
-            limelightTaEntry.setDouble(LimelightHelpers.getTA(llName));
+            limelightTxEntry.setDouble(Math.round(LimelightHelpers.getTX(llName) * 100.0) / 100.0);
+            limelightTyEntry.setDouble(Math.round(LimelightHelpers.getTY(llName) * 100.0) / 100.0);
+            limelightTaEntry.setDouble(Math.round(LimelightHelpers.getTA(llName) * 100.0) / 100.0);
             
             // Pipeline
             limelightPipelineEntry.setDouble(LimelightHelpers.getCurrentPipelineIndex(llName));
+            
+            // MegaTag2 status
+            var mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
+            limelightMT2ValidEntry.setBoolean(LimelightHelpers.validPoseEstimate(mt2));
             
             // If we have fiducial targets, show tag count and distance
             if (results.targets_Fiducials != null && results.targets_Fiducials.length > 0) {
@@ -401,7 +423,7 @@ public class ElasticManager {
                 // Get closest tag distance
                 LimelightTarget_Fiducial closestTag = results.targets_Fiducials[0];
                 double distance = closestTag.getTargetPose_CameraSpace().getTranslation().getNorm();
-                limelightDistanceEntry.setDouble(distance);
+                limelightDistanceEntry.setDouble(Math.round(distance * 100.0) / 100.0);
             } else {
                 limelightTagCountEntry.setInteger(0);
                 limelightDistanceEntry.setDouble(0.0);
@@ -413,12 +435,12 @@ public class ElasticManager {
             limelightTaEntry.setDouble(0.0);
             limelightDistanceEntry.setDouble(0.0);
             limelightTagCountEntry.setInteger(0);
+            limelightMT2ValidEntry.setBoolean(false);
         }
     }
     
     /**
      * Update all tunable constants from dashboard
-     * Call this in Robot.robotPeriodic()
      */
     public void updateTunableConstants() {
         // Intake
@@ -450,32 +472,38 @@ public class ElasticManager {
      * Update system diagnostics
      */
     public void updateDiagnostics() {
-        // CPU temp (if available - RoboRIO 2 only)
-        try {
-            // This is a placeholder - actual implementation depends on RoboRIO version
-            cpuTempEntry.setDouble(0.0);
-        } catch (Exception e) {
-            cpuTempEntry.setDouble(-1.0);
-        }
-        
         // CAN utilization
-        canUtilizationEntry.setDouble(RobotController.getCANStatus().percentBusUtilization * 100);
+        canUtilizationEntry.setDouble(
+            Math.round(RobotController.getCANStatus().percentBusUtilization * 10000.0) / 100.0);
+        
+        // CPU temp (placeholder - not all roboRIOs support this)
+        cpuTempEntry.setDouble(0.0);
+        
+        // Subsystem status (all healthy for now - could be enhanced)
+        drivetrainStatusEntry.setBoolean(true);
+        intakeStatusEntry.setBoolean(true);
+        endEffectorStatusEntry.setBoolean(true);
+        elevatorStatusEntry.setBoolean(true);
+        visionStatusEntry.setBoolean(LimelightHelpers.getTV("limelight-dihlite"));
     }
     
     /**
      * Periodic update - call this from Robot.robotPeriodic()
      */
-    public void periodic() {
+    public void periodic(double matchTime, double batteryVoltage, Pose2d robotPose) {
         // Update match time
-        updateMatchTime(Timer.getMatchTime());
+        updateMatchTime(matchTime);
         
         // Update battery voltage
-        updateBatteryVoltage(RobotController.getBatteryVoltage());
+        updateBatteryVoltage(batteryVoltage);
         
         // Update alliance
         DriverStation.getAlliance().ifPresent(alliance -> {
             updateAlliance(alliance.name());
         });
+        
+        // Update robot pose
+        updateRobotPose(robotPose);
         
         // Update vision data
         updateLimelightData();
