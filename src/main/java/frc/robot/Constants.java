@@ -109,7 +109,7 @@ public class Constants {
     public static final double End_Effector_Ground_Intake_Speed = 0.6;
     public static final double End_Effector_Ground_Outake_Speed = -0.4;
     public static final double End_Effector_Coral_Station_Intake_Speed = 0.0;
-    public static final double End_Effector_Score_L1_Coral_Speed = -0.27;
+    public static final double End_Effector_Score_L1_Coral_Speed = -0.20;
     public static final double End_Effector_Score_L2_L3_L4_Speed = 0.7; //0.35
 
     //Algae

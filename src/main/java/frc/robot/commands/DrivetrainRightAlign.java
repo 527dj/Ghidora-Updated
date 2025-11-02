@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
     private ALIGN_STATES targetPosition;
      ProfiledPIDController FBPIDController = new ProfiledPIDController(2.75, 0, 0.01, new Constraints(4.0, 4.0)); //2.75, 0, 0, 4
-     ProfiledPIDController LRPIDController = new ProfiledPIDController(6, 0, 0.0, new Constraints(4.0, 4.0));//6, 0, 0, 4, 4
+     ProfiledPIDController LRPIDController = new ProfiledPIDController(7, 0, 0.0, new Constraints(4.0, 4.0));//7, 0, 0, 4, 4
      ProfiledPIDController rotationPIDController = new ProfiledPIDController(0.1, 0, 0, new Constraints(1.0, 1.0));   
      
      boolean FBPositionHasReset = false;
