@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -227,9 +228,14 @@ public class ShuffleboardManager {
         
         // Camera stream info
         visionTab.add("Camera URL", "http://limelight-dihlite.local:5800")
-            .withWidget(BuiltInWidgets.kCameraStream)
+            .withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 2)
             .withSize(4, 1);
+
+        visionTab.add("Camera Stream", CameraServer.startAutomaticCapture("Limelight", "http://limelight.local:5800/stream.mjpg"))
+            .withWidget(BuiltInWidgets.kCameraStream)
+            .withPosition(5, 2)
+            .withSize(3,2);
     }
     
     /**
