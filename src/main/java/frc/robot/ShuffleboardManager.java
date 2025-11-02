@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.EndEffector;
 
 import java.util.Map;
@@ -42,7 +43,7 @@ public class ShuffleboardManager {
     private GenericEntry poseRotationEntry;
     private GenericEntry coralEntry;
     private GenericEntry AlgaeEntry;
-
+    private GenericEntry climbAttatched;
     
     // Vision Tab Entries
     private GenericEntry limelightValidEntry;
@@ -162,6 +163,12 @@ public class ShuffleboardManager {
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(7, 2)
             .withSize(1, 1)
+            .getEntry();
+
+        climbAttatched = mainTab.add("Climb Attatched", false)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(7,3)
+            .withSize(1,1)
             .getEntry();
     }
     
@@ -435,6 +442,12 @@ public class ShuffleboardManager {
         allianceEntry.setString(alliance);
     }
     
+
+    //update climb status
+    public void updateClimb(){
+        boolean attatched = Climb.getInstance().getClimbRollerCurrent()>=60 ? true : false;
+        climbAttatched.setBoolean(attatched);
+    }
     /**
      * Update Limelight vision data
      */
@@ -564,6 +577,7 @@ public class ShuffleboardManager {
         //Update field objects for subsystems
         updateCoralDetected();
         updateAlgaeDetected();
+        updateClimb();
     }
     
     /**
