@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     VisionManager.getInstance();
     
     // Start Limelight camera stream
-    CameraServer.startAutomaticCapture("Limelight", "http://limelight.local:5800/stream.mjpg");
+    CameraServer.startAutomaticCapture("Limelight", "http://limelight-dihlite.local:5800/stream.mjpg");
 
     // Play startup music on climb motors
     new PlayMusicCommand(
