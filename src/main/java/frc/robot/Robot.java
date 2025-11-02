@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -46,6 +47,9 @@ public class Robot extends TimedRobot {
     // Initialize vision manager
     VisionManager.getInstance();
     
+    // Start Limelight camera stream
+    CameraServer.startAutomaticCapture("Limelight", "http://limelight.local:5800/stream.mjpg");
+
     // Play startup music on climb motors
     new PlayMusicCommand(
         Climb.getInstance().getClimbWristMotor(),

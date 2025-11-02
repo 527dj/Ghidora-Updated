@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.subsystems.EndEffector;
+
 import java.util.Map;
 
 /**
@@ -37,6 +39,9 @@ public class ShuffleboardManager {
     private GenericEntry poseXEntry;
     private GenericEntry poseYEntry;
     private GenericEntry poseRotationEntry;
+    private GenericEntry coralEntry;
+    private GenericEntry AlgaeEntry;
+
     
     // Vision Tab Entries
     private GenericEntry limelightValidEntry;
@@ -145,6 +150,18 @@ public class ShuffleboardManager {
             .withPosition(8, 2)
             .withSize(2, 1)
             .getEntry();
+        
+        coralEntry = mainTab.add("Coral Detected?", false)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(6, 3)
+            .withSize(2, 1)
+            .getEntry();
+        
+        AlgaeEntry = mainTab.add("Algae Detected?", false)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(8, 3)
+            .withSize(2, 1)
+            .getEntry();
     }
     
     /**
@@ -210,7 +227,7 @@ public class ShuffleboardManager {
         
         // Camera stream info
         visionTab.add("Camera URL", "http://limelight-dihlite.local:5800")
-            .withWidget(BuiltInWidgets.kTextView)
+            .withWidget(BuiltInWidgets.kCameraStream)
             .withPosition(0, 2)
             .withSize(4, 1);
     }
@@ -371,6 +388,26 @@ public class ShuffleboardManager {
         poseRotationEntry.setDouble(Math.round(pose.getRotation().getDegrees() * 10.0) / 10.0);
     }
     
+    public void updateCoralDetected() {
+        boolean detected;
+        if(EndEffector.getInstance().getEndEffectorFrontPhotoElectricReading()){
+            detected = true;
+        } else {
+            detected = false;
+        }
+        coralEntry.setBoolean(detected);
+    }
+
+    public void updateAlgaeDetected() {
+        boolean detected;
+        if(EndEffector.getInstance().getRollerCurrent()>=70){
+            detected = true;
+        } else {
+            detected = false;
+        }
+        AlgaeEntry.setBoolean(detected);
+    }
+
     /**
      * Update match time
      */
@@ -513,6 +550,10 @@ public class ShuffleboardManager {
         
         // Update tunable constants
         updateTunableConstants();
+
+        //Update field objects for subsystems
+        updateCoralDetected();
+        updateAlgaeDetected();
     }
     
     /**

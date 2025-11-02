@@ -31,4 +31,7 @@ public final class Devices {
 
     //====================CANdle====================
     public static final int CANdleID = 21;
+
+    //====================PIDGEON====================
+    public static final int pidgeonID = 13;
 }

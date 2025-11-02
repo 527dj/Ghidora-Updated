@@ -118,4 +118,8 @@ public class EndEffector extends SubsystemBase {
     public boolean getEndEffectorBackPhotoElectricReading() {
         return !End_Effector_Back_Photoelectric.get();
     }
+
+    public double getRollerCurrent() {
+        return End_Effector_Top_Roller_Motor.getStatorCurrent().getValueAsDouble();
+    }
 }

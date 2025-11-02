@@ -39,6 +39,7 @@ import frc.robot.ShuffleboardManager;
 import frc.robot.LimelightHelpers;
 import frc.robot.TunerConstants;
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -346,6 +347,8 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+
+
 
     public void slowDrivetrain(XboxController controller, double speedMultiplier, double turnMultiplier) {
         SwerveRequest.FieldCentric drivetrainRequest = new SwerveRequest.FieldCentric()
