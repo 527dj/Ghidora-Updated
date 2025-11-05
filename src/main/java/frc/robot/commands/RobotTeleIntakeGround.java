@@ -2,8 +2,6 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -92,10 +90,10 @@ public class RobotTeleIntakeGround extends Command {
         else {
             endEffector.setEndEffectorRollerMotorSpeed(motorSpeed);
 
-        controller.setRumble(XboxController.RumbleType.kLeftRumble,
-        Constants.Absolute_Zero);
-        controller.setRumble(XboxController.RumbleType.kRightRumble,
-        Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+            controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
+            opController.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
         }
 
         SmartDashboard.putNumber("Current Intake Wrist Position: ", intake.getIntakeWristEncoder());
@@ -115,6 +113,8 @@ public class RobotTeleIntakeGround extends Command {
 
         controller.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
         controller.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        opController.setRumble(XboxController.RumbleType.kRightRumble, Constants.Absolute_Zero);
+        opController.setRumble(XboxController.RumbleType.kLeftRumble, Constants.Absolute_Zero);
 
         System.out.println("RobotTeleIntakeGround Offline");
     }
