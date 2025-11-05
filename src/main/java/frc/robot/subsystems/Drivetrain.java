@@ -25,7 +25,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -36,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.ShuffleboardManager;
+import frc.robot.Devices;
 import frc.robot.LimelightHelpers;
 import frc.robot.TunerConstants;
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
@@ -350,15 +353,52 @@ public class Drivetrain extends TunerSwerveDrivetrain implements Subsystem {
 
 
 
+    /**
+     * Original Xbox controller method - kept for backward compatibility
+     * @deprecated Use slowDrivetrain(GenericHID, double, double) instead
+     */
+    @Deprecated
     public void slowDrivetrain(XboxController controller, double speedMultiplier, double turnMultiplier) {
+        slowDrivetrain((GenericHID) controller, speedMultiplier, turnMultiplier);
+    }
+
+    /**
+     * Updated slowDrivetrain method that works with both PS5 and Xbox controllers
+     * 
+     * @param controller The generic HID controller (PS5, Xbox, etc.)
+     * @param speedMultiplier Speed multiplier for translation
+     * @param turnMultiplier Speed multiplier for rotation
+     */
+    public void slowDrivetrain(GenericHID controller, double speedMultiplier, double turnMultiplier) {
+        // Get axis values based on controller type
+        double leftY, leftX, rightX;
+        
+        if (controller instanceof XboxController) {
+            XboxController xbox = (XboxController) controller;
+            leftY = xbox.getLeftY();
+            leftX = xbox.getLeftX();
+            rightX = xbox.getRightX();
+        } else if (controller instanceof PS5Controller) {
+            PS5Controller ps5 = (PS5Controller) controller;
+            leftY = ps5.getLeftY();
+            leftX = ps5.getLeftX();
+            rightX = ps5.getRightX();
+        } else {
+            // Fallback for generic controllers using standard axis mappings
+            leftY = controller.getRawAxis(1);   // Standard left Y axis
+            leftX = controller.getRawAxis(0);   // Standard left X axis  
+            rightX = controller.getRawAxis(4);  // Standard right X axis
+        }
+
+        // Create and apply drive request
         SwerveRequest.FieldCentric drivetrainRequest = new SwerveRequest.FieldCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-        .withSteerRequestType(SteerRequestType.MotionMagicExpo);
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+            .withSteerRequestType(SteerRequestType.MotionMagicExpo);
 
         setControl(drivetrainRequest
-            .withVelocityX(-1 * MathUtil.applyDeadband(controller.getLeftY(), 0.05) * speedMultiplier * Constants.DrivetrainMaxSpeed)
-            .withVelocityY(-1 * MathUtil.applyDeadband(controller.getLeftX(), 0.05) * speedMultiplier * Constants.DrivetrainMaxSpeed)
-            .withRotationalRate(-1 * MathUtil.applyDeadband(controller.getRightX(), 0.05) * turnMultiplier * Constants.DrivetrainMaxAngularRate)
+            .withVelocityX(-1 * MathUtil.applyDeadband(leftY, Devices.JOYSTICK_DEADZONE_TOLERANCE) * speedMultiplier * Constants.DrivetrainMaxSpeed)
+            .withVelocityY(-1 * MathUtil.applyDeadband(leftX, Devices.JOYSTICK_DEADZONE_TOLERANCE) * speedMultiplier * Constants.DrivetrainMaxSpeed)
+            .withRotationalRate(-1 * MathUtil.applyDeadband(rightX, Devices.JOYSTICK_DEADZONE_TOLERANCE) * turnMultiplier * Constants.DrivetrainMaxAngularRate)
         );
     }
-} 
+}
